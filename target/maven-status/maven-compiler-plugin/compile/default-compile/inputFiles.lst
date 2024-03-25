@@ -1,0 +1,8 @@
+/Users/yeyunlu/startup/sanrenxing/service/src/main/java/com/sanrenxing/service/dao/UserDataAccessService.java
+/Users/yeyunlu/startup/sanrenxing/service/src/main/java/com/sanrenxing/service/service/UserService.java
+/Users/yeyunlu/startup/sanrenxing/service/src/main/java/com/sanrenxing/service/model/User.java
+/Users/yeyunlu/startup/sanrenxing/service/src/main/java/com/sanrenxing/service/api/UserController.java
+/Users/yeyunlu/startup/sanrenxing/service/src/main/java/com/sanrenxing/service/dao/UserDao.java
+/Users/yeyunlu/startup/sanrenxing/service/src/main/java/com/sanrenxing/service/ServiceApplication.java
+/Users/yeyunlu/startup/sanrenxing/service/src/main/java/com/sanrenxing/service/dao/FakeUserDataAccessService.java
+/Users/yeyunlu/startup/sanrenxing/service/src/main/java/com/sanrenxing/service/datasource/PostgresDatasource.java
