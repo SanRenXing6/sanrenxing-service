@@ -1,6 +1,6 @@
 package com.sanrenxing.service.service;
 
-import com.sanrenxing.service.dao.UserDao;
+import com.sanrenxing.service.dao.user.UserDao;
 import com.sanrenxing.service.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

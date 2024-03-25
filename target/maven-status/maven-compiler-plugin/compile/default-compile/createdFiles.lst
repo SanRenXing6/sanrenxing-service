@@ -1,8 +1,9 @@
 com/sanrenxing/service/ServiceApplication.class
-com/sanrenxing/service/dao/FakeUserDataAccessService.class
 com/sanrenxing/service/api/UserController.class
-com/sanrenxing/service/dao/UserDataAccessService.class
 com/sanrenxing/service/datasource/PostgresDatasource.class
 com/sanrenxing/service/service/UserService.class
-com/sanrenxing/service/dao/UserDao.class
+com/sanrenxing/service/dao/user/UserDao.class
+com/sanrenxing/service/dao/user/UserDataAccessService.class
+com/sanrenxing/service/dao/user/FakeUserDataAccessService.class
 com/sanrenxing/service/model/User.class
+com/sanrenxing/service/model/UserStatus.class
