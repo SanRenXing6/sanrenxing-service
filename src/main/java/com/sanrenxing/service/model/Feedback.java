@@ -8,21 +8,21 @@ import java.util.UUID;
 public class Feedback {
     private final UUID id;
     @NotBlank
-    private final UUID from;
+    private final UUID fromUser;
     @NotBlank
-    private final UUID to;
+    private final UUID toUser;
     @NotBlank
     private final int rate;
     private final String comment;
 
     public Feedback(@JsonProperty UUID id,
-                    @JsonProperty UUID from,
-                    @JsonProperty UUID uuid,
+                    @JsonProperty UUID fromUser,
+                    @JsonProperty UUID toUser,
                     @JsonProperty int rate,
                     @JsonProperty String comment) {
         this.id = id;
-        this.from = from;
-        to = uuid;
+        this.fromUser = fromUser;
+        this.toUser = toUser;
         this.rate = rate;
         this.comment = comment;
     }
@@ -31,12 +31,12 @@ public class Feedback {
         return id;
     }
 
-    public UUID getFrom() {
-        return from;
+    public UUID getFromUser() {
+        return fromUser;
     }
 
-    public UUID getTo() {
-        return to;
+    public UUID getToUser() {
+        return toUser;
     }
 
     public int getRate() {
