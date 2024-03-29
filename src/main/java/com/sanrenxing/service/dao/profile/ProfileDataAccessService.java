@@ -1,6 +1,9 @@
 package com.sanrenxing.service.dao.profile;
 
+import com.sanrenxing.service.common.JsonConverter;
+import com.sanrenxing.service.model.Feedback;
 import com.sanrenxing.service.model.Profile;
+import com.sanrenxing.service.model.Skill;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -8,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository("profilePostgreSQL")
 public class ProfileDataAccessService implements ProfileDao {
     private final JdbcTemplate jdbcTemplate;
 
@@ -17,26 +21,84 @@ public class ProfileDataAccessService implements ProfileDao {
 
     @Override
     public int addProfile(Profile profile) {
-        return 0;
+        final UUID id = UUID.randomUUID();
+        final String skillsJson = JsonConverter.serialize(profile.getSkills());
+        final String feedbacksJson = JsonConverter.serialize(profile.getFeedbacks());
+        System.out.println(skillsJson);
+        System.out.println(feedbacksJson);
+        final String sql = """
+            INSERT INTO \"profile\"(id, userId, description, rate, needs, skills, feedbacks) 
+            VALUES(?, ?, ?, ?, ?, CAST(? AS json), CAST(? AS json))
+        """;
+        return jdbcTemplate.update(sql,
+                id,
+                profile.getUserId(),
+                profile.getDescription(),
+                profile.getRate(),
+                profile.getNeeds(),
+                skillsJson,
+                feedbacksJson
+        );
+
     }
 
     @Override
     public List<Profile> getAllProfiles() {
-        return null;
+        final String sql = "SELECT id, userId, description, rate, needs, skills, feedbacks FROM \"profile\";";
+        return jdbcTemplate.query(sql,
+                (resultSet, i) -> {
+                    UUID id = UUID.fromString(resultSet.getString("id"));
+                    UUID userId = UUID.fromString(resultSet.getString("userId"));
+                    String description = resultSet.getString("description");
+                    int rate = resultSet.getInt("rate");
+                    String needs = resultSet.getString("needs");
+                    List<Skill> skills = JsonConverter.deserialize(resultSet.getString("skills"), Skill.class);
+                    List<Feedback> feedbacks = JsonConverter.deserialize(resultSet.getString("feedbacks"), Feedback.class);
+                   return new Profile(id, userId, description, rate, needs, skills, feedbacks);
+                });
     }
 
     @Override
     public Optional<Profile> getProfile(UUID id) {
-        return Optional.empty();
+        final String sql = "SELECT id, userId, description, rate, needs, skills, feedbacks FROM \"profile\" WHERE id = ?;";
+        Profile profile = jdbcTemplate.queryForObject(sql,
+                new Object[]{id},
+                (resultSet, i) -> {
+                    UUID userId = UUID.fromString(resultSet.getString("userId"));
+                    String description = resultSet.getString("description");
+                    int rate = resultSet.getInt("rate");
+                    String needs = resultSet.getString("needs");
+                    List<Skill> skills = JsonConverter.deserialize(resultSet.getString("skills"), Skill.class);
+                    List<Feedback> feedbacks = JsonConverter.deserialize(resultSet.getString("feedbacks"),Feedback.class);
+                    return new Profile(id, userId, description, rate, needs, skills, feedbacks);
+                });
+        return Optional.ofNullable(profile);
     }
 
     @Override
     public int deleteProfile(UUID id) {
-        return 0;
+        final String sql = "DELETE FROM \"profile\" WHERE id = ?;";
+        return jdbcTemplate.update(sql,id);
     }
 
     @Override
     public int updateProfile(UUID id, Profile profile) {
-        return 0;
+        // TODO: Conditional updates based on non-null values
+        final String skillsJson = JsonConverter.serialize(profile.getSkills());
+        final String feedbacksJson = JsonConverter.serialize(profile.getFeedbacks());
+        final String sql = """ 
+                UPDATE \"profile\"
+                SET userId = ?, description = ?, rate = ?, needs = ?, skills = CAST(? AS json), feedbacks = CAST(? AS json)
+                WHERE id = ?;
+                """;
+        return jdbcTemplate.update(sql,
+                profile.getUserId(),
+                profile.getDescription(),
+                profile.getRate(),
+                profile.getNeeds(),
+                skillsJson,
+                feedbacksJson,
+                id);
     }
+
 }

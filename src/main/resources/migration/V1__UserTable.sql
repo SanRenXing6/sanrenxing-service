@@ -8,6 +8,7 @@ CREATE TABLE "user" (
 CREATE TABLE "profile" (
     id UUID NOT NULL PRIMARY KEY,
     userId UUID  NOT NULL,
+    description TEXT,
     rate INTEGER,
     needs TEXT,
     skills JSON,

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository("postgres")
+@Repository("userPostgreSQL")
 public class UserDataAccessService implements UserDao {
     private final JdbcTemplate jdbcTemplate;
 
@@ -62,14 +62,14 @@ public class UserDataAccessService implements UserDao {
 
     @Override
     public int deleteUser(UUID id) {
-        String sql = "DELETE FROM \"user\" WHERE id = ?;";
+        final String sql = "DELETE FROM \"user\" WHERE id = ?;";
         return jdbcTemplate.update(sql,id);
     }
 
     @Override
     public int updateUser(UUID id, User user) {
         // TODO: Conditional updates based on non-null values
-        String sql = """ 
+        final String sql = """ 
                 UPDATE \"user\"
                 SET name = ?, email = ?, status = ?
                 WHERE id = ?;
