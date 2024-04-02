@@ -9,6 +9,7 @@ public class User {
     private final UUID id;
     @NotBlank
     private final String name;
+    @NotBlank
     private final String email;
     private final UserStatus status;
 
