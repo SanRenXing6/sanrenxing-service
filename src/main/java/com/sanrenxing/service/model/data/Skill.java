@@ -1,4 +1,4 @@
-package com.sanrenxing.service.model;
+package com.sanrenxing.service.model.data;
 
 public class Skill {
 

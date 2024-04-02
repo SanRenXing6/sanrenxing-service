@@ -1,7 +1,7 @@
 package com.sanrenxing.service.api;
 
 
-import com.sanrenxing.service.model.Profile;
+import com.sanrenxing.service.model.data.Profile;
 import com.sanrenxing.service.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;

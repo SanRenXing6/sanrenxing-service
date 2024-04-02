@@ -1,6 +1,6 @@
 package com.sanrenxing.service.dao.feedback;
 
-import com.sanrenxing.service.model.Feedback;
+import com.sanrenxing.service.model.data.Feedback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 

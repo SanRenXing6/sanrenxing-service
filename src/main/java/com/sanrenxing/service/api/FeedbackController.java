@@ -1,7 +1,7 @@
 package com.sanrenxing.service.api;
 
 
-import com.sanrenxing.service.model.Feedback;
+import com.sanrenxing.service.model.data.Feedback;
 import com.sanrenxing.service.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;

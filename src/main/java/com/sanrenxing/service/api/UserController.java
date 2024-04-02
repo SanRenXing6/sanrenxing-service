@@ -1,6 +1,6 @@
 package com.sanrenxing.service.api;
 
-import com.sanrenxing.service.model.User;
+import com.sanrenxing.service.model.data.User;
 import com.sanrenxing.service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -21,10 +21,10 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public void addUser(@Valid @NonNull @RequestBody User user){
-        userService.addUser(user);
-    }
+//    @PostMapping
+//    public void addUser(@Valid @NonNull @RequestBody User user){
+//        userService.addUser(user);
+//    }
 
     @GetMapping
     public List<User> getAllUsers(){

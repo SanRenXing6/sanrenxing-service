@@ -1,7 +1,8 @@
 package com.sanrenxing.service.dao.user;
 
-import com.sanrenxing.service.model.User;
-import com.sanrenxing.service.model.UserStatus;
+import com.sanrenxing.service.model.data.User;
+import com.sanrenxing.service.model.data.UserRole;
+import com.sanrenxing.service.model.data.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -20,18 +21,6 @@ public class UserDataAccessService implements UserDao {
     }
 
     @Override
-    public int addUser(User user) {
-        UUID id = UUID.randomUUID();
-        String status = UserStatus.OFFLINE.toString();
-        String sql = "INSERT into \"user\"(id, name, email, status) VALUES(?, ?, ?, ?)";
-        return jdbcTemplate.update(sql,
-                id,
-                user.getName(),
-                user.getEmail(),
-                status);
-    }
-
-    @Override
     public List<User> getAllUsers() {
         final String sql = "SELECT id, name, email, status from \"user\";";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
@@ -39,7 +28,10 @@ public class UserDataAccessService implements UserDao {
             String name = resultSet.getString("name");
             String email = resultSet.getString("email");
             UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
-            return new User(id, name, email, status);
+            UserRole role = UserRole.valueOf(resultSet.getString("role"));
+            Boolean locked = Boolean.valueOf(resultSet.getString("locked"));
+            Boolean enabled = Boolean.valueOf(resultSet.getString("enabled"));
+            return new User(id, name, email, status, null, null, role, locked, enabled);
         });
     }
 
@@ -54,7 +46,10 @@ public class UserDataAccessService implements UserDao {
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
                 UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
-                return new User(userId, name, email, status);
+                UserRole role = UserRole.valueOf(resultSet.getString("role"));
+                Boolean locked = Boolean.valueOf(resultSet.getString("locked"));
+                Boolean enabled = Boolean.valueOf(resultSet.getString("enabled"));
+                return new User(id, name, email, status, null, null, role, locked, enabled);
             });
         return Optional.ofNullable(user);
 

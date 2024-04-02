@@ -1,6 +1,18 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
 app:
   datasource:
-    jdbc-url: jdbc:postgresql://localhost:5432/spring_boot_postgres_db
+    jdbc-url: jdbc:postgresql://localhost:5432/sanrenxing
     username: postgres
     password: password
     pool-size: 30
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+      show-sql: true

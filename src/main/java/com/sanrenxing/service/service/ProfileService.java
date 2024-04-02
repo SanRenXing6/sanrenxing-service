@@ -1,7 +1,7 @@
 package com.sanrenxing.service.service;
 
 import com.sanrenxing.service.dao.profile.ProfileDao;
-import com.sanrenxing.service.model.Profile;
+import com.sanrenxing.service.model.data.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.sanrenxing.service.model;
+package com.sanrenxing.service.model.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

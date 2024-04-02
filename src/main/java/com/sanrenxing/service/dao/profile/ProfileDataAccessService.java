@@ -1,9 +1,9 @@
 package com.sanrenxing.service.dao.profile;
 
 import com.sanrenxing.service.common.JsonConverter;
-import com.sanrenxing.service.model.Feedback;
-import com.sanrenxing.service.model.Profile;
-import com.sanrenxing.service.model.Skill;
+import com.sanrenxing.service.model.data.Feedback;
+import com.sanrenxing.service.model.data.Profile;
+import com.sanrenxing.service.model.data.Skill;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 

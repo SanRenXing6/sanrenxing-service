@@ -1,7 +1,7 @@
 package com.sanrenxing.service.service;
 
 import com.sanrenxing.service.dao.feedback.FeedbackDao;
-import com.sanrenxing.service.model.Feedback;
+import com.sanrenxing.service.model.data.Feedback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
