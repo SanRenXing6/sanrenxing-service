@@ -24,14 +24,13 @@ public class UserDataAccessService implements UserDao {
     public List<User> getAllUsers() {
         final String sql = "SELECT id, name, email, status from \"user\";";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
-            UUID id = UUID.fromString(resultSet.getString("id"));
             String name = resultSet.getString("name");
             String email = resultSet.getString("email");
             UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
             UserRole role = UserRole.valueOf(resultSet.getString("role"));
             Boolean locked = Boolean.valueOf(resultSet.getString("locked"));
             Boolean enabled = Boolean.valueOf(resultSet.getString("enabled"));
-            return new User(id, name, email, status, null, null, role, locked, enabled);
+            return new User(name, email, status, null, null, role, locked, enabled);
         });
     }
 
@@ -42,14 +41,13 @@ public class UserDataAccessService implements UserDao {
             sql,
             new Object[]{id},
             (resultSet, i) -> {
-                UUID userId = UUID.fromString(resultSet.getString("id"));
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
                 UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
                 UserRole role = UserRole.valueOf(resultSet.getString("role"));
                 Boolean locked = Boolean.valueOf(resultSet.getString("locked"));
                 Boolean enabled = Boolean.valueOf(resultSet.getString("enabled"));
-                return new User(id, name, email, status, null, null, role, locked, enabled);
+                return new User(name, email, status, null, null, role, locked, enabled);
             });
         return Optional.ofNullable(user);
 

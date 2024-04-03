@@ -1,8 +1,13 @@
 CREATE TABLE "user" (
-    id UUID NOT NULL PRIMARY KEY,
+    id BIGINT NOT NULL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    status VARCHAR NOT NULL
+    status VARCHAR(100) NOT NULL,
+    userName VARCHAR(100) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    role VARCHAR(100) NOT NULL,
+    enabled BOOLEAN,
+    locked BOOLEAN
 );
 
 CREATE TABLE "profile" (

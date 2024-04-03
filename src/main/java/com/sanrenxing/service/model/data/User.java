@@ -1,5 +1,6 @@
 package com.sanrenxing.service.model.data;
 
+import jakarta.persistence.SequenceGenerator;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,11 +9,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -20,8 +20,17 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 public class User implements UserDetails {
-    private UUID id;
-    @NotBlank
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
+    private Long id;
     private String name;
     private String email;
     @Enumerated(EnumType.STRING)
@@ -29,31 +38,29 @@ public class User implements UserDetails {
     private String userName;
     private String password;
     @Enumerated(EnumType.STRING)
-    private UserRole userRole;
+    private UserRole role;
     private Boolean locked;
     private Boolean enabled;
 
-    public User(UUID id,
-                String name,
+    public User(String name,
                 String email,
                 UserStatus status,
                 String userName,
                 String password,
-                UserRole userRole,
+                UserRole role,
                 Boolean locked,
                 Boolean enabled) {
-        this.id = id;
         this.name = name;
         this.email = email;
         this.status = status;
         this.userName = userName;
         this.password = password;
-        this.userRole = userRole;
+        this.role = role;
         this.locked = locked;
         this.enabled = enabled;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
@@ -69,7 +76,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
         return Collections.singletonList(authority);
     }
 
