@@ -10,13 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class RegistrationController {
 
-    private RegistrationService registrationService;
+    private final RegistrationService registrationService;
 
     @PostMapping
-    public String register(@RequestBody RegistrationRequest request) {
-        System.out.println("test");
-
-        return registrationService.register(request);
+    public void register(@RequestBody RegistrationRequest request) {
+        registrationService.register(request);
     }
 
 }

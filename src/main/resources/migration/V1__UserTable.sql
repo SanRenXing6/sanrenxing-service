@@ -1,11 +1,11 @@
 CREATE TABLE "user" (
-    id BIGINT NOT NULL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    status VARCHAR(100) NOT NULL,
-    userName VARCHAR(100) NOT NULL,
-    password VARCHAR(100) NOT NULL,
-    role VARCHAR(100) NOT NULL,
+    id UUID NOT NULL PRIMARY KEY,
+    name VARCHAR(100),
+    userName VARCHAR(100),
+    password VARCHAR(100),
+    email VARCHAR(100),
+    status VARCHAR(100),
+    role VARCHAR(100),
     enabled BOOLEAN,
     locked BOOLEAN
 );

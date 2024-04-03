@@ -1,18 +1,14 @@
 package com.sanrenxing.service.model.data;
 
-import jakarta.persistence.SequenceGenerator;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -20,36 +16,29 @@ import java.util.Collections;
 @NoArgsConstructor
 @Entity
 public class User implements UserDetails {
-    @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
-            allocationSize = 1
-    )
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
-    )
-    private Long id;
+    private UUID id;
     private String name;
+    private String userName;
+    private String password;
     private String email;
     @Enumerated(EnumType.STRING)
     private UserStatus status;
-    private String userName;
-    private String password;
     @Enumerated(EnumType.STRING)
     private UserRole role;
     private Boolean locked;
     private Boolean enabled;
 
-    public User(String name,
-                String email,
-                UserStatus status,
+    public User(UUID id,
+                String name,
                 String userName,
                 String password,
+                String email,
+                UserStatus status,
                 UserRole role,
                 Boolean locked,
                 Boolean enabled) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.status = status;
@@ -59,20 +48,6 @@ public class User implements UserDetails {
         this.locked = locked;
         this.enabled = enabled;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public UserStatus getStatus() {return status; }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

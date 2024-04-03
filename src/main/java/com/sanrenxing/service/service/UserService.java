@@ -2,12 +2,12 @@ package com.sanrenxing.service.service;
 
 import com.sanrenxing.service.dao.user.UserDao;
 import com.sanrenxing.service.model.data.User;
-import com.sanrenxing.service.model.data.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,22 +17,25 @@ import java.util.UUID;
 @Service
 public class UserService implements UserDetailsService {
 
-    private final UserRepository appUserRepository;
     private final static String USER_NOT_FOUND_MESSAGE =
             "User with email %s not found";
+    private final BCryptPasswordEncoder passwordEncoder;
 
     private final UserDao userDao;
 
     @Autowired
-    public UserService(UserRepository appUserRepository, @Qualifier("userPostgreSQL") UserDao userDao) {
-        this.appUserRepository = appUserRepository;
+    public UserService(BCryptPasswordEncoder passwordEncoder,
+                       @Qualifier("userPostgreSQL") UserDao userDao) {
+        this.passwordEncoder = passwordEncoder;
         this.userDao = userDao;
     }
 
-    // TODO: Implement registration for adding users
-//    public int addUser(User user){
-//        return userDao.addUser(user);
-//    }
+    public void signUpUser(User user) {
+        // TODO: check if user exist
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        userDao.addUser(user);
+    }
 
     public List<User> getAllUsers() {
         return userDao.getAllUsers();
@@ -52,7 +55,6 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return appUserRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, email)));
+        return null;
     }
 }

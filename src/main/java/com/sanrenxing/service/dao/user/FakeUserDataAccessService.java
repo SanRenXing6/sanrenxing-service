@@ -1,6 +1,8 @@
 package com.sanrenxing.service.dao.user;
 
 import com.sanrenxing.service.model.data.User;
+import com.sanrenxing.service.model.data.UserRole;
+import com.sanrenxing.service.model.data.UserStatus;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -12,6 +14,21 @@ import java.util.UUID;
 public class FakeUserDataAccessService implements UserDao {
 
     private static List<User> DB = new ArrayList<>();
+
+    @Override
+    public int addUser(User user) {
+        UUID id = UUID.randomUUID();
+        DB.add(new User(id,
+                user.getName(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getEmail(),
+                UserStatus.ACTIVE,
+                UserRole.USER,
+                false,
+                true));
+        return 1;
+    }
 
     @Override
     public List<User> getAllUsers() {

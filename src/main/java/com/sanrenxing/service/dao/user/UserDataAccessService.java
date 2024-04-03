@@ -21,16 +21,34 @@ public class UserDataAccessService implements UserDao {
     }
 
     @Override
+    public int addUser(User user) {
+        String sql = "INSERT into \"user\"(id, name, userName, password, email, status, role, locked, enabled)  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        return jdbcTemplate.update(sql,
+                user.getId(),
+                user.getName(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getEmail(),
+                user.getStatus().toString(),
+                user.getRole().toString(),
+                user.getLocked(),
+                user.getEnabled());
+    }
+
+    @Override
     public List<User> getAllUsers() {
         final String sql = "SELECT id, name, email, status from \"user\";";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
+            UUID id = UUID.randomUUID();
             String name = resultSet.getString("name");
+            String userName = resultSet.getString("userName");
+            String password = resultSet.getString("password");
             String email = resultSet.getString("email");
             UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
             UserRole role = UserRole.valueOf(resultSet.getString("role"));
             Boolean locked = Boolean.valueOf(resultSet.getString("locked"));
             Boolean enabled = Boolean.valueOf(resultSet.getString("enabled"));
-            return new User(name, email, status, null, null, role, locked, enabled);
+            return new User(id, name, userName, password, email, status, role, locked, enabled);
         });
     }
 
@@ -41,13 +59,16 @@ public class UserDataAccessService implements UserDao {
             sql,
             new Object[]{id},
             (resultSet, i) -> {
+                UUID userId = UUID.randomUUID();
                 String name = resultSet.getString("name");
+                String userName = resultSet.getString("userName");
+                String password = resultSet.getString("password");
                 String email = resultSet.getString("email");
                 UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
                 UserRole role = UserRole.valueOf(resultSet.getString("role"));
                 Boolean locked = Boolean.valueOf(resultSet.getString("locked"));
                 Boolean enabled = Boolean.valueOf(resultSet.getString("enabled"));
-                return new User(name, email, status, null, null, role, locked, enabled);
+                return new User(userId, name, userName, password, email, status, role, locked, enabled);
             });
         return Optional.ofNullable(user);
 

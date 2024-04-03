@@ -8,8 +8,7 @@ import java.util.UUID;
 
 public interface UserDao {
 
-    // TODO: implement registration for adding users
-    // int addUser(User user);
+    int addUser(User user);
 
     List<User> getAllUsers();
 
