@@ -21,11 +21,6 @@ public class UserController {
         this.userService = userService;
     }
 
-//    @PostMapping
-//    public void addUser(@Valid @NonNull @RequestBody User user){
-//        userService.addUser(user);
-//    }
-
     @GetMapping
     public List<User> getAllUsers(){
         return userService.getAllUsers();

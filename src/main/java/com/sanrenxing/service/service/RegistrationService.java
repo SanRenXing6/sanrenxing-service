@@ -20,7 +20,7 @@ public class RegistrationService {
         // Check if email is valid
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if(!isValidEmail){
-            throw new IllegalStateException("Email not valid");
+            throw new IllegalStateException(String.format("Email %s not valid", request.getEmail()));
         }
         userService.signUpUser(new User(
                 UUID.randomUUID(),

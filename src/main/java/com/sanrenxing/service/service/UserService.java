@@ -31,7 +31,10 @@ public class UserService implements UserDetailsService {
     }
 
     public void signUpUser(User user) {
-        // TODO: check if user exist
+        boolean userExists = userDao.getUserByEmail(user.getEmail()).isPresent();
+        if(userExists) {
+            throw new IllegalStateException(String.format("Email %s already taken", user.getEmail()));
+        }
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         userDao.addUser(user);

@@ -75,7 +75,7 @@ public class UserDataAccessService implements UserDao {
     @Override
     public Optional<User> getUserByEmail(String targetEmail) {
         final String sql = "SELECT * from \"user\" WHERE email = ?;";
-        User user = jdbcTemplate.queryForObject(
+        List<User> users = jdbcTemplate.query(
                 sql,
                 new Object[]{targetEmail},
                 (resultSet, i) -> {
@@ -90,7 +90,11 @@ public class UserDataAccessService implements UserDao {
                     Boolean enabled = Boolean.valueOf(resultSet.getString("enabled"));
                     return new User(userId, name, userName, password, email, status, role, locked, enabled);
                 });
-        return Optional.ofNullable(user);
+        if(users.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.ofNullable(users.get(0));
+        }
     }
 
     @Override
