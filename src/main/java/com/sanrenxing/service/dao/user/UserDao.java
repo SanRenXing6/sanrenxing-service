@@ -17,4 +17,6 @@ public interface UserDao {
     int deleteUser(UUID id);
 
     int updateUser(UUID id, User user);
+
+    Optional<User> getUserByEmail(String email);
 }

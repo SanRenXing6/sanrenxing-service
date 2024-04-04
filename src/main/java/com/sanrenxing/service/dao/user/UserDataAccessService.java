@@ -37,7 +37,7 @@ public class UserDataAccessService implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        final String sql = "SELECT id, name, email, status from \"user\";";
+        final String sql = "SELECT * from \"user\";";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             UUID id = UUID.randomUUID();
             String name = resultSet.getString("name");
@@ -54,7 +54,7 @@ public class UserDataAccessService implements UserDao {
 
     @Override
     public Optional<User> getUser(UUID id) {
-        final String sql = "SELECT id, name, email, status from \"user\" WHERE id = ?;";
+        final String sql = "SELECT * from \"user\" WHERE id = ?;";
         User user = jdbcTemplate.queryForObject(
             sql,
             new Object[]{id},
@@ -71,7 +71,26 @@ public class UserDataAccessService implements UserDao {
                 return new User(userId, name, userName, password, email, status, role, locked, enabled);
             });
         return Optional.ofNullable(user);
-
+    }
+    @Override
+    public Optional<User> getUserByEmail(String targetEmail) {
+        final String sql = "SELECT * from \"user\" WHERE email = ?;";
+        User user = jdbcTemplate.queryForObject(
+                sql,
+                new Object[]{targetEmail},
+                (resultSet, i) -> {
+                    UUID userId = UUID.randomUUID();
+                    String name = resultSet.getString("name");
+                    String userName = resultSet.getString("userName");
+                    String password = resultSet.getString("password");
+                    String email = resultSet.getString("email");
+                    UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
+                    UserRole role = UserRole.valueOf(resultSet.getString("role"));
+                    Boolean locked = Boolean.valueOf(resultSet.getString("locked"));
+                    Boolean enabled = Boolean.valueOf(resultSet.getString("enabled"));
+                    return new User(userId, name, userName, password, email, status, role, locked, enabled);
+                });
+        return Optional.ofNullable(user);
     }
 
     @Override
