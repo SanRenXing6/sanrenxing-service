@@ -18,6 +18,15 @@ public class JsonConverter {
         }
     }
 
+    public static <T> String serialize(T objects) {
+        try {
+            return objectMapper.writeValueAsString(objects);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "null"; // Default to null value in case of error
+        }
+    }
+
     public static <T> List<T> deserialize(String json, Class<T> valueType) {
         try {
             return objectMapper.readValue(json, new TypeReference<List<T>>() {});

@@ -19,8 +19,8 @@ public class RegistrationController {
 
     @PostMapping
     public ResponseEntity<String> register(@RequestBody RegistrationRequest request) {
-        registrationService.register(request);
-        return ResponseEntity.ok(String.format("User %s registered", request.getUserName()));
+        String token = registrationService.register(request);
+        return ResponseEntity.ok(String.format("User %s registered, token: %s", request.getUserName(), token));
     }
 
     @ExceptionHandler(Exception.class)

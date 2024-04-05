@@ -27,3 +27,11 @@ CREATE TABLE "feedback" (
     rate INTEGER,
     comment TEXT
 );
+
+CREATE TABLE "token" (
+    id UUID NOT NULL PRIMARY KEY,
+    token VARCHAR(100) NOT NULL,
+    createdAt TIMESTAMP NOT NULL,
+    expiresAt TIMESTAMP NOT NULL,
+    userId UUID
+);

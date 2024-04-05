@@ -24,8 +24,6 @@ public class ProfileDataAccessService implements ProfileDao {
         final UUID id = UUID.randomUUID();
         final String skillsJson = JsonConverter.serialize(profile.getSkills());
         final String feedbacksJson = JsonConverter.serialize(profile.getFeedbacks());
-        System.out.println(skillsJson);
-        System.out.println(feedbacksJson);
         final String sql = """
             INSERT INTO \"profile\"(id, userId, description, rate, needs, skills, feedbacks) 
             VALUES(?, ?, ?, ?, ?, CAST(? AS json), CAST(? AS json))
