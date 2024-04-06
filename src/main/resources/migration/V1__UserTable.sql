@@ -1,4 +1,4 @@
-CREATE TABLE "user" (
+CREATE TABLE "users" (
     id UUID NOT NULL PRIMARY KEY,
     name VARCHAR(100),
     userName VARCHAR(100),
@@ -10,7 +10,7 @@ CREATE TABLE "user" (
     locked BOOLEAN
 );
 
-CREATE TABLE "profile" (
+CREATE TABLE "profiles" (
     id UUID NOT NULL PRIMARY KEY,
     userId UUID  NOT NULL,
     description TEXT,
@@ -20,7 +20,7 @@ CREATE TABLE "profile" (
     feedbacks JSON
 );
 
-CREATE TABLE "feedback" (
+CREATE TABLE "feedbacks" (
     id UUID NOT NULL PRIMARY KEY,
     fromUser UUID  NOT NULL,
     toUser UUID NOT NULL,
@@ -28,10 +28,11 @@ CREATE TABLE "feedback" (
     comment TEXT
 );
 
-CREATE TABLE "token" (
+CREATE TABLE "tokens" (
     id UUID NOT NULL PRIMARY KEY,
     token VARCHAR(100) NOT NULL,
     createdAt TIMESTAMP NOT NULL,
     expiresAt TIMESTAMP NOT NULL,
+    confirmedAt TIMESTAMP,
     userId UUID
 );

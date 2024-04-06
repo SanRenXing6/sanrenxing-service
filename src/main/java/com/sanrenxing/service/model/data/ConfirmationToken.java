@@ -20,16 +20,21 @@ public class ConfirmationToken {
     private String token;
     private LocalDateTime createdAt;
     private LocalDateTime expiresAt;
-    private User user;
+    private LocalDateTime confirmedAt;
+    private UUID userId;
 
-    public ConfirmationToken(String token,
+    public ConfirmationToken(UUID id,
+                             String token,
                              LocalDateTime createdAt,
                              LocalDateTime expiresAt,
-                             User user
+                             LocalDateTime confirmedAt,
+                             UUID userId
     ) {
+        this.id = id;
         this.token = token;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
-        this.user = user;
+        this.confirmedAt = confirmedAt;
+        this.userId = userId;
     }
 }

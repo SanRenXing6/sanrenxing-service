@@ -19,4 +19,6 @@ public interface UserDao {
     int updateUser(UUID id, User user);
 
     Optional<User> getUserByEmail(String email);
+
+    void enableUser(UUID id);
 }

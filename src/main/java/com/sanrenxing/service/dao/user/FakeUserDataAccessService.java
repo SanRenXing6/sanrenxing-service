@@ -67,4 +67,7 @@ public class FakeUserDataAccessService implements UserDao {
     public Optional<User> getUserByEmail(String email) {
         return DB.stream().filter(item -> item.getEmail().equals(email)).findFirst();
     }
+
+    @Override
+    public void enableUser(UUID id) {}
 }

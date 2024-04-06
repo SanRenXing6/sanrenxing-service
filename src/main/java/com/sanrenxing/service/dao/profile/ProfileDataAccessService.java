@@ -4,6 +4,7 @@ import com.sanrenxing.service.common.JsonConverter;
 import com.sanrenxing.service.model.data.Feedback;
 import com.sanrenxing.service.model.data.Profile;
 import com.sanrenxing.service.model.data.Skill;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +26,7 @@ public class ProfileDataAccessService implements ProfileDao {
         final String skillsJson = JsonConverter.serialize(profile.getSkills());
         final String feedbacksJson = JsonConverter.serialize(profile.getFeedbacks());
         final String sql = """
-            INSERT INTO \"profile\"(id, userId, description, rate, needs, skills, feedbacks) 
+            INSERT INTO profiles(id, userId, description, rate, needs, skills, feedbacks)
             VALUES(?, ?, ?, ?, ?, CAST(? AS json), CAST(? AS json))
         """;
         return jdbcTemplate.update(sql,
@@ -42,7 +43,7 @@ public class ProfileDataAccessService implements ProfileDao {
 
     @Override
     public List<Profile> getAllProfiles() {
-        final String sql = "SELECT id, userId, description, rate, needs, skills, feedbacks FROM \"profile\";";
+        final String sql = "SELECT * FROM profiles;";
         return jdbcTemplate.query(sql,
                 (resultSet, i) -> {
                     UUID id = UUID.fromString(resultSet.getString("id"));
@@ -58,24 +59,29 @@ public class ProfileDataAccessService implements ProfileDao {
 
     @Override
     public Optional<Profile> getProfile(UUID id) {
-        final String sql = "SELECT id, userId, description, rate, needs, skills, feedbacks FROM \"profile\" WHERE id = ?;";
-        Profile profile = jdbcTemplate.queryForObject(sql,
-                new Object[]{id},
-                (resultSet, i) -> {
-                    UUID userId = UUID.fromString(resultSet.getString("userId"));
-                    String description = resultSet.getString("description");
-                    int rate = resultSet.getInt("rate");
-                    String needs = resultSet.getString("needs");
-                    List<Skill> skills = JsonConverter.deserialize(resultSet.getString("skills"), Skill.class);
-                    List<Feedback> feedbacks = JsonConverter.deserialize(resultSet.getString("feedbacks"),Feedback.class);
-                    return new Profile(id, userId, description, rate, needs, skills, feedbacks);
-                });
-        return Optional.ofNullable(profile);
+        final String sql = "SELECT * FROM profiles WHERE id = ?;";
+        try{
+            Profile profile = jdbcTemplate.queryForObject(sql,
+                    new Object[]{id},
+                    (resultSet, i) -> {
+                        UUID userId = UUID.fromString(resultSet.getString("userId"));
+                        String description = resultSet.getString("description");
+                        int rate = resultSet.getInt("rate");
+                        String needs = resultSet.getString("needs");
+                        List<Skill> skills = JsonConverter.deserialize(resultSet.getString("skills"), Skill.class);
+                        List<Feedback> feedbacks = JsonConverter.deserialize(resultSet.getString("feedbacks"),Feedback.class);
+                        return new Profile(id, userId, description, rate, needs, skills, feedbacks);
+                    });
+            return Optional.ofNullable(profile);
+        }catch (EmptyResultDataAccessException e){
+            return Optional.empty();
+        }
+
     }
 
     @Override
     public int deleteProfile(UUID id) {
-        final String sql = "DELETE FROM \"profile\" WHERE id = ?;";
+        final String sql = "DELETE FROM profiles WHERE id = ?;";
         return jdbcTemplate.update(sql,id);
     }
 
@@ -85,7 +91,7 @@ public class ProfileDataAccessService implements ProfileDao {
         final String skillsJson = JsonConverter.serialize(profile.getSkills());
         final String feedbacksJson = JsonConverter.serialize(profile.getFeedbacks());
         final String sql = """ 
-                UPDATE \"profile\"
+                UPDATE profiles
                 SET userId = ?, description = ?, rate = ?, needs = ?, skills = CAST(? AS json), feedbacks = CAST(? AS json)
                 WHERE id = ?;
                 """;

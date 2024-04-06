@@ -47,10 +47,12 @@ public class UserService implements UserDetailsService {
         // Add new confirmation token
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken = new ConfirmationToken(
+                null,
                 token,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusMinutes(15),
-                user
+                null,
+                user.getId()
         );
         confirmationTokenService.saveConfirmationToken(confirmationToken);
         return token;
@@ -71,6 +73,8 @@ public class UserService implements UserDetailsService {
     public int updateUser(UUID id, User user) {
         return userDao.updateUser(id, user);
     }
+
+    public void enableUser(UUID id) {userDao.enableUser(id);}
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

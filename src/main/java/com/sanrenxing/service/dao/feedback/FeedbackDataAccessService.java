@@ -1,6 +1,7 @@
 package com.sanrenxing.service.dao.feedback;
 
 import com.sanrenxing.service.model.data.Feedback;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +21,7 @@ public class FeedbackDataAccessService implements  FeedbackDao{
     @Override
     public int addFeedback(Feedback feedback) {
         UUID id = UUID.randomUUID();
-        String sql = "INSERT into \"feedback\"(id, fromUser, toUser, rate, comment) VALUES (?, ?, ?, ?, ?);";
+        String sql = "INSERT into feedbacks(id, fromUser, toUser, rate, comment) VALUES (?, ?, ?, ?, ?);";
         return jdbcTemplate.update(sql,
                 id,
                 feedback.getFromUser(),
@@ -31,7 +32,7 @@ public class FeedbackDataAccessService implements  FeedbackDao{
 
     @Override
     public List<Feedback> getAllFeedbacks() {
-        final String sql = "SELECT id, fromUser, toUser, rate, comment FROM \"feedback\";";
+        final String sql = "SELECT * FROM feedbacks;";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             UUID id = UUID.fromString(resultSet.getString("id"));
             UUID fromUser = UUID.fromString(resultSet.getString("fromUser"));
@@ -44,26 +45,31 @@ public class FeedbackDataAccessService implements  FeedbackDao{
 
     @Override
     public Optional<Feedback> getFeedback(UUID id) {
-        final String sql = "SELECT id, fromUser, toUser, rate, comment FROM \"feedback\" WHERE id = ?;";
-        Feedback feedback = jdbcTemplate.queryForObject(
-                sql,
-                new Object[]{id},
-                (resultSet, i) -> {
-                    UUID feedbackId = UUID.fromString(resultSet.getString("id"));
-                    UUID fromUser = UUID.fromString(resultSet.getString("fromUser"));
-                    UUID toUser = UUID.fromString(resultSet.getString("toUser"));
-                    int rate = resultSet.getInt("rate");
-                    String comment = resultSet.getString("comment");
-                    return new Feedback(feedbackId, fromUser, toUser, rate, comment);
-                }
-        );
-        return Optional.ofNullable(feedback);
+        final String sql = "SELECT * FROM feedbacks WHERE id = ?;";
+        try{
+            Feedback feedback = jdbcTemplate.queryForObject(
+                    sql,
+                    new Object[]{id},
+                    (resultSet, i) -> {
+                        UUID feedbackId = UUID.fromString(resultSet.getString("id"));
+                        UUID fromUser = UUID.fromString(resultSet.getString("fromUser"));
+                        UUID toUser = UUID.fromString(resultSet.getString("toUser"));
+                        int rate = resultSet.getInt("rate");
+                        String comment = resultSet.getString("comment");
+                        return new Feedback(feedbackId, fromUser, toUser, rate, comment);
+                    }
+            );
+            return Optional.ofNullable(feedback);
+        }catch (EmptyResultDataAccessException e){
+            return Optional.empty();
+        }
+
 
     }
 
     @Override
     public int deleteFeedback(UUID id) {
-        final String sql = "DELETE FROM \"feedback\" WHERE id = ?;";
+        final String sql = "DELETE FROM feedbacks WHERE id = ?;";
         return jdbcTemplate.update(sql, id);
 
     }
@@ -71,7 +77,7 @@ public class FeedbackDataAccessService implements  FeedbackDao{
     @Override
     public int updateFeedback(UUID id, Feedback feedback) {
         final String sql = """
-                UPDATE \"feedback\"
+                UPDATE feedbacks
                 SET fromUser = ?, toUser = ?, rate = ?, comment = ?
                 WHERE id = ?;
                 """;

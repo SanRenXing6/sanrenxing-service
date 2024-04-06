@@ -23,6 +23,11 @@ public class RegistrationController {
         return ResponseEntity.ok(String.format("User %s registered, token: %s", request.getUserName(), token));
     }
 
+    @GetMapping(path = "confirm")
+    public String confirm(@RequestParam("token") String token) {
+        return registrationService.confirmToken(token);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception ex) {
         // Delegate to GlobalExceptionHandler for handling
