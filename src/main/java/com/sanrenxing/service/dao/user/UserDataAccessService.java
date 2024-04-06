@@ -56,28 +56,32 @@ public class UserDataAccessService implements UserDao {
     @Override
     public Optional<User> getUser(UUID id) {
         final String sql = "SELECT * from users WHERE id = ?;";
-        User user = jdbcTemplate.queryForObject(
-            sql,
-            new Object[]{id},
-            (resultSet, i) -> {
-                UUID userId = UUID.randomUUID();
-                String name = resultSet.getString("name");
-                String userName = resultSet.getString("userName");
-                String password = resultSet.getString("password");
-                String email = resultSet.getString("email");
-                UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
-                UserRole role = UserRole.valueOf(resultSet.getString("role"));
-                Boolean locked = Boolean.valueOf(resultSet.getString("locked"));
-                Boolean enabled = Boolean.valueOf(resultSet.getString("enabled"));
-                return new User(userId, name, userName, password, email, status, role, locked, enabled);
-            });
-        return Optional.ofNullable(user);
+        try{
+            User user = jdbcTemplate.queryForObject(
+                sql,
+                new Object[]{id},
+                (resultSet, i) -> {
+                    UUID userId = UUID.randomUUID();
+                    String name = resultSet.getString("name");
+                    String userName = resultSet.getString("userName");
+                    String password = resultSet.getString("password");
+                    String email = resultSet.getString("email");
+                    UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
+                    UserRole role = UserRole.valueOf(resultSet.getString("role"));
+                    Boolean locked = Boolean.valueOf(resultSet.getString("locked"));
+                    Boolean enabled = Boolean.valueOf(resultSet.getString("enabled"));
+                    return new User(userId, name, userName, password, email, status, role, locked, enabled);
+                });
+            return Optional.ofNullable(user);
+         } catch (EmptyResultDataAccessException e){
+            return Optional.empty();
+        }
     }
     @Override
     public Optional<User> getUserByEmail(String targetEmail) {
         final String sql = "SELECT * from users WHERE email = ?;";
-        try {
-            List<User> users = jdbcTemplate.query(
+        try{
+            User user = jdbcTemplate.queryForObject(
                     sql,
                     new Object[]{targetEmail},
                     (resultSet, i) -> {
@@ -88,12 +92,11 @@ public class UserDataAccessService implements UserDao {
                         String email = resultSet.getString("email");
                         UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
                         UserRole role = UserRole.valueOf(resultSet.getString("role"));
-                        Boolean locked = Boolean.valueOf(resultSet.getString("locked"));
-                        Boolean enabled = Boolean.valueOf(resultSet.getString("enabled"));
+                        Boolean locked = resultSet.getBoolean("locked");
+                        Boolean enabled = resultSet.getBoolean("enabled");
                         return new User(userId, name, userName, password, email, status, role, locked, enabled);
                     });
-            if(users.isEmpty()) return Optional.empty();
-            return Optional.ofNullable(users.get(0));
+            return Optional.ofNullable(user);
         } catch (EmptyResultDataAccessException e){
             return Optional.empty();
         }

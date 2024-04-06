@@ -79,6 +79,10 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         final Optional<User> user = userDao.getUserByEmail(email);
-        return user.orElse(null);
+        if(user.isEmpty()){
+            throw new IllegalStateException(String.format("User %s not found", email));
+        } else{
+            return user.orElse(null);
+        }
     }
 }

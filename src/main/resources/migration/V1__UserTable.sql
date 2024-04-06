@@ -1,9 +1,9 @@
 CREATE TABLE "users" (
     id UUID NOT NULL PRIMARY KEY,
     name VARCHAR(100),
-    userName VARCHAR(100),
-    password VARCHAR(100),
-    email VARCHAR(100),
+    userName VARCHAR(100) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
     status VARCHAR(100),
     role VARCHAR(100),
     enabled BOOLEAN,
@@ -24,7 +24,7 @@ CREATE TABLE "feedbacks" (
     id UUID NOT NULL PRIMARY KEY,
     fromUser UUID  NOT NULL,
     toUser UUID NOT NULL,
-    rate INTEGER,
+    rate INTEGER NOT NULL,
     comment TEXT
 );
 

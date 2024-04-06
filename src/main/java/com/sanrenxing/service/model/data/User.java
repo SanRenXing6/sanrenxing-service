@@ -6,6 +6,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.*;
+
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
@@ -21,6 +23,7 @@ public class User implements UserDetails {
     private String name;
     private String userName;
     private String password;
+    @NotBlank
     private String email;
     @Enumerated(EnumType.STRING)
     private UserStatus status;
