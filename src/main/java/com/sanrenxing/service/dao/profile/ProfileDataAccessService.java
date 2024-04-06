@@ -1,6 +1,6 @@
 package com.sanrenxing.service.dao.profile;
 
-import com.sanrenxing.service.common.JsonConverter;
+import com.sanrenxing.service.util.JsonConverter;
 import com.sanrenxing.service.model.data.Feedback;
 import com.sanrenxing.service.model.data.Profile;
 import com.sanrenxing.service.model.data.Skill;

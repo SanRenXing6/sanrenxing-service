@@ -1,4 +1,4 @@
-package com.sanrenxing.service.common;
+package com.sanrenxing.service.util;
 
 import org.springframework.stereotype.Service;
 
