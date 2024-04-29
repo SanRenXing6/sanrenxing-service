@@ -76,7 +76,6 @@ public class ProfileDataAccessService implements ProfileDao {
         }catch (EmptyResultDataAccessException e){
             return Optional.empty();
         }
-
     }
 
     @Override
@@ -103,6 +102,22 @@ public class ProfileDataAccessService implements ProfileDao {
                 skillsJson,
                 feedbacksJson,
                 id);
+    }
+
+    @Override
+    public List<Profile> searchBySkill(String skillText) {
+        final String sql = "SELECT * FROM profiles WHERE to_tsvector(skills) @@plainto_tsquery('" + skillText + "') ORDER BY rate DESC";
+        return jdbcTemplate.query(sql,
+                (resultSet, i) -> {
+                    UUID id = UUID.fromString(resultSet.getString("id"));
+                    UUID userId = UUID.fromString(resultSet.getString("userId"));
+                    String description = resultSet.getString("description");
+                    int rate = resultSet.getInt("rate");
+                    String needs = resultSet.getString("needs");
+                    List<Skill> skills = JsonConverter.deserialize(resultSet.getString("skills"), Skill.class);
+                    List<Feedback> feedbacks = JsonConverter.deserialize(resultSet.getString("feedbacks"), Feedback.class);
+                    return new Profile(id, userId, description, rate, needs, skills, feedbacks);
+                });
     }
 
 }

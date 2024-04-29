@@ -39,4 +39,6 @@ public class ProfileService {
     public int updateProfile(UUID id, Profile profile) {
         return profileDao.updateProfile(id, profile);
     }
+
+    public List<Profile> searchBySkill(String text) {return profileDao.searchBySkill(text); }
 }

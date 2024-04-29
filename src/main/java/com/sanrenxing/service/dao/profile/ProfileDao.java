@@ -16,4 +16,6 @@ public interface ProfileDao {
     int deleteProfile(UUID id);
 
     int updateProfile(UUID id, Profile profile);
+
+    List<Profile> searchBySkill(String skillText);
 }
