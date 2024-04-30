@@ -30,7 +30,7 @@ public class RegistrationController {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception ex) {
-        // Delegate to GlobalExceptionHandler for handling
+        // Delegate to  GlobalExceptionHandler for handling
         return globalExceptionHandler.handleException(ex);
     }
 }
