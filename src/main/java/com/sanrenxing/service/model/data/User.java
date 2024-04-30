@@ -17,11 +17,11 @@ import java.util.UUID;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
+@Builder
 public class User implements UserDetails {
     @Id
     private UUID id;
     private String name;
-    private String userName;
     private String password;
     @NotBlank
     private String email;
@@ -29,27 +29,19 @@ public class User implements UserDetails {
     private UserStatus status;
     @Enumerated(EnumType.STRING)
     private UserRole role;
-    private Boolean locked;
-    private Boolean enabled;
 
     public User(UUID id,
                 String name,
-                String userName,
                 String password,
                 String email,
                 UserStatus status,
-                UserRole role,
-                Boolean locked,
-                Boolean enabled) {
+                UserRole role) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.status = status;
-        this.userName = userName;
         this.password = password;
         this.role = role;
-        this.locked = locked;
-        this.enabled = enabled;
     }
 
     @Override
@@ -65,7 +57,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName;
+        return email;
     }
 
     @Override
@@ -75,7 +67,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return !locked;
+        return true;
     }
 
     @Override
@@ -85,7 +77,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return true;
     }
 }
 

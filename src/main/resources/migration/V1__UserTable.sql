@@ -1,13 +1,10 @@
 CREATE TABLE "users" (
     id UUID NOT NULL PRIMARY KEY,
     name VARCHAR(100),
-    userName VARCHAR(100) NOT NULL,
     password VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
     status VARCHAR(100),
-    role VARCHAR(100),
-    enabled BOOLEAN,
-    locked BOOLEAN
+    role VARCHAR(100)
 );
 
 CREATE TABLE "profiles" (
@@ -31,8 +28,8 @@ CREATE TABLE "feedbacks" (
 CREATE TABLE "tokens" (
     id UUID NOT NULL PRIMARY KEY,
     token VARCHAR(100) NOT NULL,
-    createdAt TIMESTAMP NOT NULL,
-    expiresAt TIMESTAMP NOT NULL,
-    confirmedAt TIMESTAMP,
+    tokenType VARCHAR(100) NOT NULL,
+    isExpired BOOLEAN,
+    isRevoked BOOLEAN,
     userId UUID
 );

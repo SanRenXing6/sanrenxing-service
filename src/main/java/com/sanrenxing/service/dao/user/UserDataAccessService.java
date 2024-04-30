@@ -3,6 +3,7 @@ package com.sanrenxing.service.dao.user;
 import com.sanrenxing.service.model.data.User;
 import com.sanrenxing.service.model.data.UserRole;
 import com.sanrenxing.service.model.data.UserStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Repository("userPostgreSQL")
 public class UserDataAccessService implements UserDao {
     private final JdbcTemplate jdbcTemplate;
@@ -23,17 +25,14 @@ public class UserDataAccessService implements UserDao {
 
     @Override
     public int addUser(User user) {
-        String sql = "INSERT into \"users\"(id, name, userName, password, email, status, role, locked, enabled)  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT into \"users\"(id, name, password, email, status, role)  VALUES(?, ?, ?, ?, ?, ?);";
         return jdbcTemplate.update(sql,
                 user.getId(),
                 user.getName(),
-                user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
                 user.getStatus().toString(),
-                user.getRole().toString(),
-                user.getLocked(),
-                user.getEnabled());
+                user.getRole().toString());
     }
 
     @Override
@@ -42,14 +41,11 @@ public class UserDataAccessService implements UserDao {
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             UUID id = UUID.randomUUID();
             String name = resultSet.getString("name");
-            String userName = resultSet.getString("userName");
             String password = resultSet.getString("password");
             String email = resultSet.getString("email");
             UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
             UserRole role = UserRole.valueOf(resultSet.getString("role"));
-            Boolean locked = Boolean.valueOf(resultSet.getString("locked"));
-            Boolean enabled = Boolean.valueOf(resultSet.getString("enabled"));
-            return new User(id, name, userName, password, email, status, role, locked, enabled);
+            return new User(id, name, password, email, status, role);
         });
     }
 
@@ -63,14 +59,11 @@ public class UserDataAccessService implements UserDao {
                 (resultSet, i) -> {
                     UUID userId = UUID.randomUUID();
                     String name = resultSet.getString("name");
-                    String userName = resultSet.getString("userName");
                     String password = resultSet.getString("password");
                     String email = resultSet.getString("email");
                     UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
                     UserRole role = UserRole.valueOf(resultSet.getString("role"));
-                    Boolean locked = Boolean.valueOf(resultSet.getString("locked"));
-                    Boolean enabled = Boolean.valueOf(resultSet.getString("enabled"));
-                    return new User(userId, name, userName, password, email, status, role, locked, enabled);
+                    return new User(userId, name, password, email, status, role);
                 });
             return Optional.ofNullable(user);
          } catch (EmptyResultDataAccessException e){
@@ -87,31 +80,16 @@ public class UserDataAccessService implements UserDao {
                     (resultSet, i) -> {
                         UUID userId = UUID.randomUUID();
                         String name = resultSet.getString("name");
-                        String userName = resultSet.getString("userName");
                         String password = resultSet.getString("password");
                         String email = resultSet.getString("email");
                         UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
                         UserRole role = UserRole.valueOf(resultSet.getString("role"));
-                        Boolean locked = resultSet.getBoolean("locked");
-                        Boolean enabled = resultSet.getBoolean("enabled");
-                        return new User(userId, name, userName, password, email, status, role, locked, enabled);
+                        return new User(userId, name, password, email, status, role);
                     });
             return Optional.ofNullable(user);
         } catch (EmptyResultDataAccessException e){
             return Optional.empty();
         }
-    }
-
-    @Override
-    public void enableUser(UUID id) {
-        final String sql = """ 
-                UPDATE users
-                SET enabled = ?
-                WHERE id = ?;
-                """;
-        jdbcTemplate.update(sql,
-                true,
-                id);
     }
 
     @Override
