@@ -11,6 +11,7 @@ CREATE TABLE "profiles" (
     id UUID NOT NULL PRIMARY KEY,
     userId UUID  NOT NULL,
     description TEXT,
+    image BYTEA,
     rate INTEGER,
     needs TEXT,
     skills JSON,
@@ -23,13 +24,4 @@ CREATE TABLE "feedbacks" (
     toUser UUID NOT NULL,
     rate INTEGER NOT NULL,
     comment TEXT
-);
-
-CREATE TABLE "tokens" (
-    id UUID NOT NULL PRIMARY KEY,
-    token VARCHAR(100) NOT NULL,
-    tokenType VARCHAR(100) NOT NULL,
-    isExpired BOOLEAN,
-    isRevoked BOOLEAN,
-    userId UUID
 );

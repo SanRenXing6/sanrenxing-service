@@ -1,5 +1,0 @@
-package com.sanrenxing.service.service;
-
-public interface EmailSender {
-    void send(String to, String email);
-}
