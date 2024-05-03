@@ -25,9 +25,10 @@ public class UserDataAccessService implements UserDao {
 
     @Override
     public int addUser(User user) {
+        UUID id = UUID.randomUUID();
         String sql = "INSERT into \"users\"(id, name, password, email, status, role)  VALUES(?, ?, ?, ?, ?, ?);";
         return jdbcTemplate.update(sql,
-                user.getId(),
+                id,
                 user.getName(),
                 user.getPassword(),
                 user.getEmail(),
@@ -39,7 +40,7 @@ public class UserDataAccessService implements UserDao {
     public List<User> getAllUsers() {
         final String sql = "SELECT * from users;";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
-            UUID id = UUID.randomUUID();
+            UUID id = UUID.fromString(resultSet.getString("id"));
             String name = resultSet.getString("name");
             String password = resultSet.getString("password");
             String email = resultSet.getString("email");
@@ -57,7 +58,7 @@ public class UserDataAccessService implements UserDao {
                 sql,
                 new Object[]{id},
                 (resultSet, i) -> {
-                    UUID userId = UUID.randomUUID();
+                    UUID userId = UUID.fromString(resultSet.getString("id"));
                     String name = resultSet.getString("name");
                     String password = resultSet.getString("password");
                     String email = resultSet.getString("email");
@@ -78,7 +79,7 @@ public class UserDataAccessService implements UserDao {
                     sql,
                     new Object[]{targetEmail},
                     (resultSet, i) -> {
-                        UUID userId = UUID.randomUUID();
+                        UUID userId = UUID.fromString(resultSet.getString("id"));
                         String name = resultSet.getString("name");
                         String password = resultSet.getString("password");
                         String email = resultSet.getString("email");
