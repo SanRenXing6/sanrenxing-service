@@ -16,6 +16,7 @@ import java.util.UUID;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Builder
 public class User implements UserDetails {
@@ -29,20 +30,6 @@ public class User implements UserDetails {
     private UserStatus status;
     @Enumerated(EnumType.STRING)
     private UserRole role;
-
-    public User(UUID id,
-                String name,
-                String password,
-                String email,
-                UserStatus status,
-                UserRole role) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.status = status;
-        this.password = password;
-        this.role = role;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

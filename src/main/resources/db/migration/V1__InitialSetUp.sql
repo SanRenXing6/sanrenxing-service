@@ -11,7 +11,7 @@ CREATE TABLE "profiles" (
     id UUID NOT NULL PRIMARY KEY,
     userId UUID  NOT NULL,
     description TEXT,
-    image BYTEA,
+    imageId UUID,
     rate INTEGER,
     needs TEXT,
     skills JSON,
@@ -24,4 +24,9 @@ CREATE TABLE "feedbacks" (
     toUser UUID NOT NULL,
     rate INTEGER NOT NULL,
     comment TEXT
+);
+
+CREATE TABLE "images" (
+    id UUID NOT NULL PRIMARY KEY,
+    data BYTEA NOT NULL
 );

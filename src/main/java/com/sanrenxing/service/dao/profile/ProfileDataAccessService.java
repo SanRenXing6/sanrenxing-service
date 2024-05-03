@@ -8,6 +8,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,13 +27,14 @@ public class ProfileDataAccessService implements ProfileDao {
         final String skillsJson = JsonConverter.serialize(profile.getSkills());
         final String feedbacksJson = JsonConverter.serialize(profile.getFeedbacks());
         final String sql = """
-            INSERT INTO profiles(id, userId, description, rate, needs, skills, feedbacks)
-            VALUES(?, ?, ?, ?, ?, CAST(? AS json), CAST(? AS json))
+            INSERT INTO profiles(id, userId, description, imageId, rate, needs, skills, feedbacks)
+            VALUES(?, ?, ?, ?, ?, ?, CAST(? AS json), CAST(? AS json))
         """;
         return jdbcTemplate.update(sql,
                 id,
                 profile.getUserId(),
                 profile.getDescription(),
+                profile.getImageId(),
                 profile.getRate(),
                 profile.getNeeds(),
                 skillsJson,
@@ -49,11 +51,12 @@ public class ProfileDataAccessService implements ProfileDao {
                     UUID id = UUID.fromString(resultSet.getString("id"));
                     UUID userId = UUID.fromString(resultSet.getString("userId"));
                     String description = resultSet.getString("description");
+                    UUID imageId = UUID.fromString(resultSet.getString("imageId"));
                     int rate = resultSet.getInt("rate");
                     String needs = resultSet.getString("needs");
                     List<Skill> skills = JsonConverter.deserialize(resultSet.getString("skills"), Skill.class);
                     List<Feedback> feedbacks = JsonConverter.deserialize(resultSet.getString("feedbacks"), Feedback.class);
-                   return new Profile(id, userId, description, rate, needs, skills, feedbacks);
+                   return new Profile(id, userId, description, imageId, rate, needs, skills, feedbacks);
                 });
     }
 
@@ -66,11 +69,12 @@ public class ProfileDataAccessService implements ProfileDao {
                     (resultSet, i) -> {
                         UUID userId = UUID.fromString(resultSet.getString("userId"));
                         String description = resultSet.getString("description");
+                        UUID imageId = UUID.fromString(resultSet.getString("imageId"));
                         int rate = resultSet.getInt("rate");
                         String needs = resultSet.getString("needs");
                         List<Skill> skills = JsonConverter.deserialize(resultSet.getString("skills"), Skill.class);
                         List<Feedback> feedbacks = JsonConverter.deserialize(resultSet.getString("feedbacks"),Feedback.class);
-                        return new Profile(id, userId, description, rate, needs, skills, feedbacks);
+                        return new Profile(id, userId, description, imageId, rate, needs, skills, feedbacks);
                     });
             return Optional.ofNullable(profile);
         }catch (EmptyResultDataAccessException e){
@@ -112,11 +116,12 @@ public class ProfileDataAccessService implements ProfileDao {
                     UUID id = UUID.fromString(resultSet.getString("id"));
                     UUID userId = UUID.fromString(resultSet.getString("userId"));
                     String description = resultSet.getString("description");
+                    UUID imageId = UUID.fromString(resultSet.getString("imageId"));
                     int rate = resultSet.getInt("rate");
                     String needs = resultSet.getString("needs");
                     List<Skill> skills = JsonConverter.deserialize(resultSet.getString("skills"), Skill.class);
                     List<Feedback> feedbacks = JsonConverter.deserialize(resultSet.getString("feedbacks"), Feedback.class);
-                    return new Profile(id, userId, description, rate, needs, skills, feedbacks);
+                    return new Profile(id, userId, description, imageId, rate, needs, skills, feedbacks);
                 });
     }
 
