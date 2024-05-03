@@ -3,6 +3,8 @@ package com.sanrenxing.service.service;
 import com.sanrenxing.service.dao.user.UserDao;
 import com.sanrenxing.service.model.data.User;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,10 +15,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
 public class UserService implements UserDetailsService {
 
     private final UserDao userDao;
+
+    @Autowired
+    public UserService(@Qualifier("userPostgreSQL") UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     public List<User> getAllUsers() {
         return userDao.getAllUsers();

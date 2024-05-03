@@ -1,13 +1,14 @@
 package com.sanrenxing.service.dao.image;
 
-import com.sanrenxing.service.model.data.Feedback;
 import com.sanrenxing.service.model.data.Image;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository("imagePostgreSQL")
 public class ImageDataAccessService implements ImageDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -17,12 +18,13 @@ public class ImageDataAccessService implements ImageDao {
     }
 
     @Override
-    public int uploadImage(byte[] data) {
+    public UUID uploadImage(byte[] data) {
         UUID id = UUID.randomUUID();
         String sql = "INSERT into images(id, data) VALUES (?, ?);";
-        return jdbcTemplate.update(sql,
+        jdbcTemplate.update(sql,
                 id,
                 data);
+        return id;
     }
 
     @Override
@@ -41,5 +43,11 @@ public class ImageDataAccessService implements ImageDao {
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public int deleteImage(UUID id) {
+        final String sql = "DELETE from images WHERE id = ?;";
+        return jdbcTemplate.update(sql, id);
     }
 }

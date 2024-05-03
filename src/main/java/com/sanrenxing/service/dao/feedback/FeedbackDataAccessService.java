@@ -69,7 +69,6 @@ public class FeedbackDataAccessService implements  FeedbackDao{
     public int deleteFeedback(UUID id) {
         final String sql = "DELETE FROM feedbacks WHERE id = ?;";
         return jdbcTemplate.update(sql, id);
-
     }
 
     @Override
