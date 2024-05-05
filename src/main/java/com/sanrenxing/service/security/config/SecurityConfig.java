@@ -4,7 +4,6 @@ import com.sanrenxing.service.security.JwtAuthFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,8 +27,11 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
             .authorizeHttpRequests(auth ->
-                    auth.requestMatchers("/api/v1/auth/**")
-                            .permitAll()
+                    auth.requestMatchers("/api/v1/auth/**").permitAll()
+                            .requestMatchers("/api/v1/users/**").authenticated()
+                            .requestMatchers("/api/v1/profiles/**").authenticated()
+                            .requestMatchers("/api/v1/feedbacks/**").authenticated()
+                            .requestMatchers("/api/v1/images/**").authenticated()
                             .anyRequest()
                             .authenticated());
         return http.build();
