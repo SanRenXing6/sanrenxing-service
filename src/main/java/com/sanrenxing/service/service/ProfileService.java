@@ -32,6 +32,10 @@ public class ProfileService {
         return profileDao.getProfile(id);
     }
 
+    public Optional<Profile> getProfileByUserId(UUID userId) {
+        return profileDao.getProfileByUserId(userId);
+    }
+
     public int deleteProfile(UUID id) {
         return profileDao.deleteProfile(id);
     }

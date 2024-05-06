@@ -83,6 +83,28 @@ public class ProfileDataAccessService implements ProfileDao {
     }
 
     @Override
+    public Optional<Profile> getProfileByUserId(UUID userId) {
+        final String sql = "SELECT * FROM profiles WHERE userId = ?;";
+        try{
+            Profile profile = jdbcTemplate.queryForObject(sql,
+                    new Object[]{userId},
+                    (resultSet, i) -> {
+                        UUID id = UUID.fromString(resultSet.getString("id"));
+                        String description = resultSet.getString("description");
+                        UUID imageId = UUID.fromString(resultSet.getString("imageId"));
+                        int rate = resultSet.getInt("rate");
+                        String needs = resultSet.getString("needs");
+                        List<Skill> skills = JsonConverter.deserialize(resultSet.getString("skills"), Skill.class);
+                        List<Feedback> feedbacks = JsonConverter.deserialize(resultSet.getString("feedbacks"),Feedback.class);
+                        return new Profile(id, userId, description, imageId, rate, needs, skills, feedbacks);
+                    });
+            return Optional.ofNullable(profile);
+        }catch (EmptyResultDataAccessException e){
+            return Optional.empty();
+        }
+    }
+
+    @Override
     public int deleteProfile(UUID id) {
         final String sql = "DELETE FROM profiles WHERE id = ?;";
         return jdbcTemplate.update(sql,id);

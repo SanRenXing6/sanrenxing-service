@@ -13,6 +13,8 @@ public interface ProfileDao {
 
     Optional<Profile> getProfile(UUID id);
 
+    Optional<Profile> getProfileByUserId(UUID userId);
+
     int deleteProfile(UUID id);
 
     int updateProfile(UUID id, Profile profile);
