@@ -30,6 +30,7 @@ public class User implements UserDetails {
     private UserStatus status;
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    private boolean hasProfile;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

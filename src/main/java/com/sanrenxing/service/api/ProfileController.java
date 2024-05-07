@@ -2,7 +2,8 @@ package com.sanrenxing.service.api;
 
 import com.sanrenxing.service.model.data.Profile;
 import com.sanrenxing.service.service.ProfileService;
-import lombok.AllArgsConstructor;
+import com.sanrenxing.service.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,14 +13,23 @@ import java.util.UUID;
 
 @RequestMapping("api/v1/profiles")
 @RestController
-@AllArgsConstructor
 public class ProfileController {
 
     private final ProfileService profileService;
+    private final UserService userService;
+
+    @Autowired
+    public ProfileController(ProfileService profileService, UserService userService) {
+
+        this.profileService = profileService;
+        this.userService = userService;
+    }
 
     @PostMapping
     public void addProfie(@Valid @RequestBody @NonNull Profile profile) {
+
         profileService.addProfile(profile);
+        userService.updateUserProfile(profile.getUserId(), true);
     }
 
     @GetMapping
@@ -40,7 +50,9 @@ public class ProfileController {
 
     @DeleteMapping(path="{id}")
     public void deleteProfile(@PathVariable("id") UUID id) {
+        final UUID userId = profileService.getProfile(id).get().getUserId();
         profileService.deleteProfile(id);
+        userService.updateUserProfile(userId, false);
     }
 
     @PutMapping(path="{id}")

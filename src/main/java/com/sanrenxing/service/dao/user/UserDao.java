@@ -18,5 +18,7 @@ public interface UserDao {
 
     int updateUser(UUID id, User user);
 
+    int updateUserProfile(UUID id, boolean hasProfile);
+
     Optional<User> getUserByEmail(String email);
 }

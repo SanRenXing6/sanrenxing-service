@@ -2,7 +2,6 @@ package com.sanrenxing.service.service;
 
 import com.sanrenxing.service.dao.user.UserDao;
 import com.sanrenxing.service.model.data.User;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,6 +37,10 @@ public class UserService implements UserDetailsService {
 
     public int updateUser(UUID id, User user) {
         return userDao.updateUser(id, user);
+    }
+
+    public int updateUserProfile(UUID id, boolean hasProfile) {
+        return userDao.updateUserProfile(id, hasProfile);
     }
 
     public boolean checkIfUserExist(String email) {

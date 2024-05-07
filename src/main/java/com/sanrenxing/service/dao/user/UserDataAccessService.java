@@ -26,14 +26,16 @@ public class UserDataAccessService implements UserDao {
     @Override
     public int addUser(User user) {
         UUID id = UUID.randomUUID();
-        String sql = "INSERT into \"users\"(id, name, password, email, status, role)  VALUES(?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT into \"users\"(id, name, password, email, status, role, hasProfile)  VALUES(?, ?, ?, ?, ?, ?, ?);";
         return jdbcTemplate.update(sql,
                 id,
                 user.getName(),
                 user.getPassword(),
                 user.getEmail(),
                 user.getStatus().toString(),
-                user.getRole().toString());
+                user.getRole().toString(),
+                false
+        );
     }
 
     @Override
@@ -46,7 +48,8 @@ public class UserDataAccessService implements UserDao {
             String email = resultSet.getString("email");
             UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
             UserRole role = UserRole.valueOf(resultSet.getString("role"));
-            return new User(id, name, password, email, status, role);
+            boolean hasProfile = resultSet.getBoolean("hasProfile");
+            return new User(id, name, password, email, status, role, hasProfile);
         });
     }
 
@@ -64,7 +67,8 @@ public class UserDataAccessService implements UserDao {
                     String email = resultSet.getString("email");
                     UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
                     UserRole role = UserRole.valueOf(resultSet.getString("role"));
-                    return new User(userId, name, password, email, status, role);
+                    boolean hasProfile = resultSet.getBoolean("hasProfile");
+                    return new User(userId, name, password, email, status, role, hasProfile);
                 });
             return Optional.ofNullable(user);
          } catch (EmptyResultDataAccessException e){
@@ -85,7 +89,8 @@ public class UserDataAccessService implements UserDao {
                         String email = resultSet.getString("email");
                         UserStatus status = UserStatus.valueOf(resultSet.getString("status"));
                         UserRole role = UserRole.valueOf(resultSet.getString("role"));
-                        return new User(userId, name, password, email, status, role);
+                        boolean hasProfile = resultSet.getBoolean("hasProfile");
+                        return new User(userId, name, password, email, status, role, hasProfile);
                     });
             return Optional.ofNullable(user);
         } catch (EmptyResultDataAccessException e){
@@ -111,6 +116,18 @@ public class UserDataAccessService implements UserDao {
                 user.getName(),
                 user.getEmail(),
                 user.getStatus().toString(),
+                id);
+    }
+
+    @Override
+    public int updateUserProfile(UUID id, boolean hasProfile) {
+        final String sql = """ 
+                UPDATE users
+                SET hasProfile = ?
+                WHERE id = ?;
+                """;
+        return jdbcTemplate.update(sql,
+                hasProfile,
                 id);
     }
 }

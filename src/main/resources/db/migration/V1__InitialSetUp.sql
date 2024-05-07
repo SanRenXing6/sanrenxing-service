@@ -4,7 +4,8 @@ CREATE TABLE "users" (
     password VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
     status VARCHAR(100),
-    role VARCHAR(100)
+    role VARCHAR(100),
+    hasProfile BOOLEAN
 );
 
 CREATE TABLE "profiles" (

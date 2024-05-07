@@ -2,7 +2,7 @@ app:
   datasource:
     jdbcUrl: jdbc:postgresql://localhost:5432/sanrenxing
     username: postgres
-    password: sanrenxing
+    password: password
     pool-size: 30
 server:
   error:

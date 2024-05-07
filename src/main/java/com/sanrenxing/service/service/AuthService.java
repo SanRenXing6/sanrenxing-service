@@ -42,10 +42,7 @@ public class AuthService {
                 .status(UserStatus.OFFLINE)
                 .build();
         userDao.addUser(user);
-        var jwtToken = jwtService.generateToken(user);
-        return LoginResponse.builder()
-                .token(jwtToken)
-                .build();
+        return LoginResponse.builder().build();
     }
 
     public LoginResponse login(LoginRequest request) {
@@ -60,6 +57,8 @@ public class AuthService {
         var jwtToken = jwtService.generateToken(user);
         return LoginResponse.builder()
                 .token(jwtToken)
+                .userId(user.getId())
+                .hasProfile(user.isHasProfile())
                 .build();
     }
 }
