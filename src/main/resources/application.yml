@@ -1,9 +1,12 @@
 app:
   datasource:
-    jdbcUrl: jdbc:postgresql://localhost:5432/sanrenxing
-    username: postgres
-    password: password
+    jdbcUrl: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     pool-size: 30
+  sql:
+    init:
+      mode: always
 server:
   error:
     include-message: always
