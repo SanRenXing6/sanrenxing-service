@@ -1,6 +1,8 @@
 package com.sanrenxing.service.service;
 
+import com.sanrenxing.service.dao.profile.ProfileDao;
 import com.sanrenxing.service.dao.user.UserDao;
+import com.sanrenxing.service.model.data.Profile;
 import com.sanrenxing.service.model.data.UserRole;
 import com.sanrenxing.service.model.data.UserStatus;
 import com.sanrenxing.service.model.request.LoginRequest;
@@ -15,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,6 +26,7 @@ import java.util.UUID;
 public class AuthService {
 
     private final UserDao userDao;
+    private final ProfileDao profileDao;
     private final JwtService jwtService;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -54,11 +58,20 @@ public class AuthService {
         );
         var user = userDao.getUserByEmail(request.getEmail())
                 .orElseThrow();
+        Optional<Profile> profile = profileDao.getProfileByUserId(user.getId());
         var jwtToken = jwtService.generateToken(user);
-        return LoginResponse.builder()
-                .token(jwtToken)
-                .userId(user.getId())
-                .hasProfile(user.isHasProfile())
-                .build();
+        if (profile.isPresent()){
+            return LoginResponse.builder()
+                    .token(jwtToken)
+                    .userId(user.getId())
+                    .profileId(profile.get().getId())
+                    .imageId(profile.get().getImageId())
+                    .build();
+        } else {
+            return LoginResponse.builder()
+                    .token(jwtToken)
+                    .userId(user.getId())
+                    .build();
+        }
     }
 }

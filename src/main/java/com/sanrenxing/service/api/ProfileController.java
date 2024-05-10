@@ -27,7 +27,6 @@ public class ProfileController {
 
     @PostMapping
     public void addProfie(@Valid @RequestBody @NonNull Profile profile) {
-
         profileService.addProfile(profile);
         userService.updateUserProfile(profile.getUserId(), true);
     }

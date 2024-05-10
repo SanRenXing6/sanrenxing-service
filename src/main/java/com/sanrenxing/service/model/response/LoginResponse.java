@@ -14,5 +14,6 @@ import java.util.UUID;
 public class LoginResponse {
     private String token;
     private UUID userId;
-    private boolean hasProfile;
+    private UUID profileId;
+    private UUID imageId;
 }
