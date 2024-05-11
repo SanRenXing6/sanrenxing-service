@@ -16,7 +16,7 @@ public class FeedbackService {
     private final FeedbackDao feedbackDao;
 
     @Autowired
-    public FeedbackService(@Qualifier("feedbackPostgreSQL") FeedbackDao feedbackDao) {
+    public FeedbackService(@Qualifier("feedbackMySQL") FeedbackDao feedbackDao) {
         this.feedbackDao = feedbackDao;
     }
 

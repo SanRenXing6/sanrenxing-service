@@ -1,17 +1,16 @@
-app:
-  datasource:
-    jdbcUrl: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    pool-size: 30
-  sql:
-    init:
-      mode: always
 server:
+  port: 8080
   error:
     include-message: always
-    include-binding-errors: always
-logging:
-  level:
-    org.springframework: INFO
-    com.example: DEBUG
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/sanrenxing
+    username: sanrenxing
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: true

@@ -15,7 +15,7 @@ public class ImageService {
     private final ImageDao imageDao;
 
     @Autowired
-    public ImageService(@Qualifier("imagePostgreSQL") ImageDao imageDao) {
+    public ImageService(@Qualifier("imageMySQL") ImageDao imageDao) {
         this.imageDao = imageDao;
     }
 

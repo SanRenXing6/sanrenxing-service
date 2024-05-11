@@ -9,23 +9,23 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository("feedbackPostgreSQL")
-public class FeedbackDataAccessService implements  FeedbackDao{
+@Repository("feedbackMySQL")
+public class FeedbackDataMysqlService implements FeedbackDao {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public FeedbackDataAccessService(JdbcTemplate jdbcTemplate) {
+    public FeedbackDataMysqlService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public int addFeedback(Feedback feedback) {
         UUID id = UUID.randomUUID();
-        String sql = "INSERT into feedbacks(id, fromUser, toUser, rate, comment) VALUES (?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO feedbacks(id, fromUser, toUser, rate, comment) VALUES (?, ?, ?, ?, ?);";
         return jdbcTemplate.update(sql,
-                id,
-                feedback.getFromUser(),
-                feedback.getToUser(),
+                id.toString(),  // Convert UUID to string
+                feedback.getFromUser().toString(),
+                feedback.getToUser().toString(),
                 feedback.getRate(),
                 feedback.getComment());
     }
@@ -49,7 +49,7 @@ public class FeedbackDataAccessService implements  FeedbackDao{
         try{
             Feedback feedback = jdbcTemplate.queryForObject(
                     sql,
-                    new Object[]{id},
+                    new Object[]{id.toString()},  // Convert UUID to string for the query
                     (resultSet, i) -> {
                         UUID feedbackId = UUID.fromString(resultSet.getString("id"));
                         UUID fromUser = UUID.fromString(resultSet.getString("fromUser"));
@@ -60,7 +60,7 @@ public class FeedbackDataAccessService implements  FeedbackDao{
                     }
             );
             return Optional.ofNullable(feedback);
-        }catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }
@@ -68,7 +68,7 @@ public class FeedbackDataAccessService implements  FeedbackDao{
     @Override
     public int deleteFeedback(UUID id) {
         final String sql = "DELETE FROM feedbacks WHERE id = ?;";
-        return jdbcTemplate.update(sql, id);
+        return jdbcTemplate.update(sql, id.toString());  // Convert UUID to string
     }
 
     @Override
@@ -79,11 +79,11 @@ public class FeedbackDataAccessService implements  FeedbackDao{
                 WHERE id = ?;
                 """;
         return jdbcTemplate.update(sql,
-                feedback.getFromUser(),
-                feedback.getToUser(),
+                feedback.getFromUser().toString(),
+                feedback.getToUser().toString(),
                 feedback.getRate(),
                 feedback.getComment(),
-                id
+                id.toString()  // Convert UUID to string
         );
     }
 }

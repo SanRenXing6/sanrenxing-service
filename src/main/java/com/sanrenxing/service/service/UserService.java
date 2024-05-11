@@ -19,7 +19,7 @@ public class UserService implements UserDetailsService {
     private final UserDao userDao;
 
     @Autowired
-    public UserService(@Qualifier("userPostgreSQL") UserDao userDao) {
+    public UserService(@Qualifier("userMySQL") UserDao userDao) {
         this.userDao = userDao;
     }
 

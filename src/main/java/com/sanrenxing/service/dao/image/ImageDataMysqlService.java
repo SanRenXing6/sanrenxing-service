@@ -8,21 +8,21 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository("imagePostgreSQL")
-public class ImageDataAccessService implements ImageDao {
+@Repository("imageMySQL")
+public class ImageDataMysqlService implements ImageDao {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public ImageDataAccessService(JdbcTemplate jdbcTemplate) {
+    public ImageDataMysqlService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public UUID uploadImage(byte[] data) {
         UUID id = UUID.randomUUID();
-        String sql = "INSERT into images(id, data) VALUES (?, ?);";
+        String sql = "INSERT INTO images(id, data) VALUES (?, ?);";
         jdbcTemplate.update(sql,
-                id,
+                id.toString(),  // Convert UUID to string
                 data);
         return id;
     }
@@ -32,9 +32,9 @@ public class ImageDataAccessService implements ImageDao {
         final String sql = "SELECT * FROM images WHERE id = ?;";
         try {
             Image image = jdbcTemplate.queryForObject(sql,
-                    new Object[]{targetId},
+                    new Object[]{targetId.toString()},  // Convert UUID to string for query
                     (resultSet, i) -> {
-                        UUID id = UUID.fromString(resultSet.getString("id"));
+                        UUID id = UUID.fromString(resultSet.getString("id"));  // Convert string back to UUID
                         byte[] data = resultSet.getBytes("data");
                         return new Image(id, data);
                     }
@@ -47,7 +47,7 @@ public class ImageDataAccessService implements ImageDao {
 
     @Override
     public int deleteImage(UUID id) {
-        final String sql = "DELETE from images WHERE id = ?;";
-        return jdbcTemplate.update(sql, id);
+        final String sql = "DELETE FROM images WHERE id = ?;";
+        return jdbcTemplate.update(sql, id.toString());  // Convert UUID to string
     }
 }

@@ -16,7 +16,7 @@ public class ProfileService {
     private final ProfileDao profileDao;
 
     @Autowired
-    public ProfileService(@Qualifier("profilePostgreSQL") ProfileDao profileDao) {
+    public ProfileService(@Qualifier("profileMySQL") ProfileDao profileDao) {
         this.profileDao = profileDao;
     }
 
