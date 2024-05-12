@@ -17,7 +17,11 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         var corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000", "https://san-ren-xing-console-c0666bedcf9c.herokuapp.com"));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000",
+                "https://san-ren-xing-console-c0666bedcf9c.herokuapp.com",
+                "http://sanrenxing-2g5oqm4j478e488f-1326511498.tcloudbaseapp.com",
+                "https://sanrenxing-2g5oqm4j478e488f-1326511498.tcloudbaseapp.com"
+        ));
         corsConfiguration.setAllowedHeaders(List.of("Content-Type", "Authorization", "type", "Cache-Control"));
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         source.registerCorsConfiguration("/**", corsConfiguration);
