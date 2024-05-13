@@ -1,7 +1,9 @@
 package com.sanrenxing.service.api;
 
 import com.sanrenxing.service.model.data.Profile;
+import com.sanrenxing.service.model.data.SkillLabel;
 import com.sanrenxing.service.service.ProfileService;
+import com.sanrenxing.service.service.SkillService;
 import com.sanrenxing.service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -17,18 +19,26 @@ public class ProfileController {
 
     private final ProfileService profileService;
     private final UserService userService;
+    private final SkillService skillService;
 
     @Autowired
-    public ProfileController(ProfileService profileService, UserService userService) {
-
+    public ProfileController(ProfileService profileService,
+                             UserService userService,
+                             SkillService skillService) {
         this.profileService = profileService;
         this.userService = userService;
+        this.skillService = skillService;
     }
 
     @PostMapping
     public void addProfie(@Valid @RequestBody @NonNull Profile profile) {
         profileService.addProfile(profile);
         userService.updateUserProfile(profile.getUserId(), true);
+        profile.getSkills().forEach((skill) -> {
+            if(skillService.getSkill(skill.getName()).isEmpty()){
+                skillService.addSkill(new SkillLabel(skill.getName(), null));
+            }
+        });
     }
 
     @GetMapping
