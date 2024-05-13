@@ -54,9 +54,8 @@ public class JwtService {
     }
 
     private boolean isTokenExpired(String token) {
-        return false;
-        // TODO: add token refresh logic and uncomment this line
-        // return extractExpiration(token).before(new Date());
+        // TODO: add token refresh logic
+        return extractExpiration(token).before(new Date());
     }
 
     private Claims extractAllClaims(String token) {

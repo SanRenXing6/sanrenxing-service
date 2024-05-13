@@ -19,7 +19,10 @@ public class SkillService {
     }
 
     public int addSkill(SkillLabel skillLabel){
-        return skillDao.addSkill(skillLabel);
+        if(!skillLabel.getName().isEmpty()) {
+            return skillDao.addSkill(skillLabel);
+        }
+        return -1;
     }
 
     public List<SkillLabel> getAllSkills() {
