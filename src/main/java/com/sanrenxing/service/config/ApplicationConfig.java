@@ -1,4 +1,4 @@
-package com.sanrenxing.service.security.config;
+package com.sanrenxing.service.config;
 
 import com.sanrenxing.service.service.UserService;
 import lombok.AllArgsConstructor;

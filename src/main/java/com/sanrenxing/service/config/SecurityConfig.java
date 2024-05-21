@@ -1,6 +1,6 @@
-package com.sanrenxing.service.security.config;
+package com.sanrenxing.service.config;
 
-import com.sanrenxing.service.security.JwtAuthFilter;
+import com.sanrenxing.service.config.JwtAuthFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
             .authorizeHttpRequests(auth ->
                     auth.requestMatchers("/api/v1/auth/**").permitAll()
+                            .requestMatchers("api/v1/ws/**").permitAll()
                             .requestMatchers("/api/v1/users/**").authenticated()
                             .requestMatchers("/api/v1/profiles/**").authenticated()
                             .requestMatchers("/api/v1/feedbacks/**").authenticated()

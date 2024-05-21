@@ -1,4 +1,4 @@
-package com.sanrenxing.service.security;
+package com.sanrenxing.service.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,4 +1,4 @@
-package com.sanrenxing.service.security.config;
+package com.sanrenxing.service.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
