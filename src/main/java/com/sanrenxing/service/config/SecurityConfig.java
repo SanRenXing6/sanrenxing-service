@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
             .authorizeHttpRequests(auth ->
                     auth.requestMatchers("/api/v1/auth/**").permitAll()
-                            .requestMatchers("api/v1/ws/**").permitAll()
+                            .requestMatchers("api/v1/chat/**").permitAll()
                             .requestMatchers("/api/v1/users/**").authenticated()
                             .requestMatchers("/api/v1/profiles/**").authenticated()
                             .requestMatchers("/api/v1/feedbacks/**").authenticated()

@@ -9,7 +9,6 @@ import com.sanrenxing.service.model.request.LoginRequest;
 import com.sanrenxing.service.model.request.RegisterRequest;
 import com.sanrenxing.service.model.data.User;
 import com.sanrenxing.service.model.response.LoginResponse;
-import com.sanrenxing.service.config.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,27 +1,30 @@
 package com.sanrenxing.service.config;
 
+import com.sanrenxing.service.handler.ChatWebSocketHandler;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
-import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
-    private final WebSocketHandler webSocketHandler;
-
-    public WebSocketConfig(WebSocketHandler webSocketHandler) {
-        this.webSocketHandler = webSocketHandler;
-    }
+    private final static String CHAT_ENDPOINT = "/api/v1/chat";
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(webSocketHandler, "/api/v1/ws")
+        registry.addHandler(getWebSocketHandler(), CHAT_ENDPOINT)
                 .setAllowedOrigins("*")
-                .addInterceptors(new HttpSessionHandshakeInterceptor());
+                .addInterceptors(new SessionInterceptor());
     }
+
+    @Bean
+    public ChatWebSocketHandler getWebSocketHandler() {
+        return new ChatWebSocketHandler();
+    }
+
 }
 
 

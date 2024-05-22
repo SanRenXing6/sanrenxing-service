@@ -1,4 +1,4 @@
-package com.sanrenxing.service.config;
+package com.sanrenxing.service.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
