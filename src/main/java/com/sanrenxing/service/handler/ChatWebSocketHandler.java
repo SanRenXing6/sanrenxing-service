@@ -1,5 +1,6 @@
 package com.sanrenxing.service.handler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -7,6 +8,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.*;
 
+@Slf4j
 public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     private final Map<String, WebSocketSession> webSocketSessions = new HashMap<>();
@@ -20,19 +22,20 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
-        String[] data = payload.split(":", 2);
+        String[] data = payload.split(":", 4);
+        // ${toUserId}:${myUserName}:${myUserId}:${inputMessage}
         String toUserId = data[0];
-        String messageContent = data[1];
-
         WebSocketSession toSession = webSocketSessions.get(toUserId);
         if (toSession != null && toSession.isOpen()) {
-            toSession.sendMessage(new TextMessage(messageContent));
+            toSession.sendMessage(new TextMessage(payload));
         }
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        webSocketSessions.remove(session.getId());
+        if(webSocketSessions.containsValue(session)){
+            webSocketSessions.values().remove(session);
+        }
     }
 
     private String getUserId(WebSocketSession session) {

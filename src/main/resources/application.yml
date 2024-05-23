@@ -13,5 +13,8 @@ server:
     include-binding-errors: always
 logging:
   level:
+    root: INFO
+    com.sanrenxing.service: DEBUG
     org.springframework: INFO
-    com.example: DEBUG
+    org.hibernate: INFO
+

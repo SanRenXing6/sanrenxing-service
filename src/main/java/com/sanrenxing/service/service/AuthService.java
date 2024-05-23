@@ -73,4 +73,9 @@ public class AuthService {
                     .build();
         }
     }
+
+    public String refreshToken(UUID userId) {
+        var user = userService.getUser(userId).orElseThrow();
+        return jwtService.generateToken(user);
+    }
 }
