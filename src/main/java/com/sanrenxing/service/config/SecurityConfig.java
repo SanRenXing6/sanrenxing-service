@@ -32,6 +32,7 @@ public class SecurityConfig {
                             .requestMatchers("/api/v1/users/**").authenticated()
                             .requestMatchers("/api/v1/profiles/**").authenticated()
                             .requestMatchers("/api/v1/feedbacks/**").authenticated()
+                            .requestMatchers("/api/v1/messages/**").authenticated()
                             .requestMatchers("/api/v1/images/**").authenticated()
                             .anyRequest()
                             .authenticated());
