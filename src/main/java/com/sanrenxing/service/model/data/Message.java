@@ -14,7 +14,9 @@ import java.util.UUID;
 public class Message {
     private final UUID id;
     @NotBlank
-    private final UUID fromUser;
+    private final UUID fromUserId;
+    @NotBlank
+    private final String fromUserName;
     @NotBlank
     private final UUID toUser;
     @NotBlank

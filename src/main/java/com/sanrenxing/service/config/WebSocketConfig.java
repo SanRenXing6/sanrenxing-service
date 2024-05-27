@@ -1,6 +1,6 @@
 package com.sanrenxing.service.config;
 
-import com.sanrenxing.service.handler.ChatWebSocketHandler;
+import com.sanrenxing.service.api.WebSocketController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -21,8 +21,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
     }
 
     @Bean
-    public ChatWebSocketHandler getWebSocketHandler() {
-        return new ChatWebSocketHandler();
+    public WebSocketController getWebSocketHandler() {
+        return new WebSocketController();
     }
 
 }

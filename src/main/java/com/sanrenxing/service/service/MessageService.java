@@ -21,12 +21,16 @@ public class MessageService {
          messageDao.addMessage(message);
     }
 
-    public Map<UUID, List<Message>> getMessages(UUID userId) {
+    public Map<String, List<Message>> getMessages(UUID userId) {
          List<Message> messages = messageDao.getMessagesToUser(userId);
-         Map<UUID, List<Message>> result = new HashMap<>();
+         Map<String, List<Message>> result = new HashMap<>();
          for(Message message: messages){
-             UUID otherUserId = message.getFromUser().equals(userId)? message.getToUser() :message.getFromUser();
-             result.computeIfAbsent(otherUserId, k->new ArrayList<>()).add(message);
+             UUID otherUserId = message.getFromUserId().equals(userId)? message.getToUser() :message.getFromUserId();
+             String userKey = message.getFromUserName() + ":" + otherUserId.toString();
+             if (!result.containsKey(userKey)){
+                result.put(userKey, new ArrayList<>());
+             }
+             result.get(userKey).add(message);
          }
         return result;
     }

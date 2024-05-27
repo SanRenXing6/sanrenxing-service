@@ -1,4 +1,4 @@
-package com.sanrenxing.service.handler;
+package com.sanrenxing.service.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.CloseStatus;
@@ -9,7 +9,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.util.*;
 
 @Slf4j
-public class ChatWebSocketHandler extends TextWebSocketHandler {
+public class WebSocketController extends TextWebSocketHandler {
 
     private final Map<String, WebSocketSession> webSocketSessions = new HashMap<>();
 

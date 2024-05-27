@@ -29,7 +29,7 @@ public class MessageController {
     }
 
     @GetMapping(path="{userId}")
-    public ResponseEntity<Map<UUID, List<Message>>> getMessages(@PathVariable("userId") UUID userId) {
+    public ResponseEntity<Map<String, List<Message>>> getMessages(@PathVariable("userId") UUID userId) {
         return ResponseEntity.ok(messageService.getMessages(userId));
     }
 
