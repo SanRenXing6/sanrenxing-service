@@ -25,8 +25,19 @@ public class MessageService {
          List<Message> messages = messageDao.getMessagesToUser(userId);
          Map<String, List<Message>> result = new HashMap<>();
          for(Message message: messages){
-             UUID otherUserId = message.getFromUserId().equals(userId)? message.getToUser() :message.getFromUserId();
-             String userKey = message.getFromUserName() + ":" + otherUserId.toString();
+             UUID otherUserId;
+             String otherUserName;
+             if(message.getFromUserId().equals(userId)) {
+                 otherUserId = message.getToUserId();
+                 otherUserName = message.getToUserName();
+             }else {
+                 otherUserId = message.getFromUserId();
+                 otherUserName = message.getFromUserName();
+             }
+             if(otherUserId.equals(userId)){
+                 continue;
+             }
+             String userKey = otherUserName + ":" + otherUserId;
              if (!result.containsKey(userKey)){
                 result.put(userKey, new ArrayList<>());
              }

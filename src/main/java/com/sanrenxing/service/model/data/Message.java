@@ -18,7 +18,9 @@ public class Message {
     @NotBlank
     private final String fromUserName;
     @NotBlank
-    private final UUID toUser;
+    private final UUID toUserId;
+    @NotBlank
+    private final String toUserName;
     @NotBlank
     private final String content;
     private LocalDateTime createdAt;

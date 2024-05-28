@@ -22,9 +22,9 @@ public class WebSocketController extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
-        String[] data = payload.split(":", 4);
-        // ${toUserId}:${myUserName}:${myUserId}:${inputMessage}
-        String toUserId = data[0];
+        String[] data = payload.split(":", 5);
+        // ${toUserName}:${toUserId}:${fromUserName}:${fromUserId}:${inputMessage}
+        String toUserId = data[1];
         WebSocketSession toSession = webSocketSessions.get(toUserId);
         if (toSession != null && toSession.isOpen()) {
             toSession.sendMessage(new TextMessage(payload));
