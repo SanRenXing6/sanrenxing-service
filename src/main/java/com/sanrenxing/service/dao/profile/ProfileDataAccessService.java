@@ -26,12 +26,13 @@ public class ProfileDataAccessService implements ProfileDao {
         final String skillsJson = JsonConverter.serialize(profile.getSkills());
         final String feedbacksJson = JsonConverter.serialize(profile.getFeedbacks());
         final String sql = """
-            INSERT INTO profiles(id, userId, description, imageId, rate, needs, skills, feedbacks)
-            VALUES(?, ?, ?, ?, ?, ?, CAST(? AS json), CAST(? AS json))
+            INSERT INTO profiles(id, userId, userName, description, imageId, rate, needs, skills, feedbacks)
+            VALUES(?, ?, ?, ?, ?, ?, ?, CAST(? AS json), CAST(? AS json))
         """;
         return jdbcTemplate.update(sql,
                 id,
                 profile.getUserId(),
+                profile.getUserName(),
                 profile.getDescription(),
                 profile.getImageId(),
                 profile.getRate(),
@@ -47,10 +48,10 @@ public class ProfileDataAccessService implements ProfileDao {
         final String sql = "SELECT * FROM profiles;";
         return jdbcTemplate.query(sql,
                 (resultSet, i) -> {
-
                     UUID imageId = null;
                     UUID id = UUID.fromString(resultSet.getString("id"));
                     UUID userId = UUID.fromString(resultSet.getString("userId"));
+                    String userName = resultSet.getString("userName");
                     String description = resultSet.getString("description");
                     String imageString = resultSet.getString("imageId");
                     int rate = resultSet.getInt("rate");
@@ -61,7 +62,7 @@ public class ProfileDataAccessService implements ProfileDao {
                     if (imageString!=null && !imageString.isEmpty()) {
                         imageId=UUID.fromString(imageString);
                     }
-                   return new Profile(id, userId, description, imageId, rate, needs, skills, feedbacks);
+                   return new Profile(id, userId, userName, description, imageId, rate, needs, skills, feedbacks);
                 });
     }
 
@@ -73,13 +74,14 @@ public class ProfileDataAccessService implements ProfileDao {
                     new Object[]{id},
                     (resultSet, i) -> {
                         UUID userId = UUID.fromString(resultSet.getString("userId"));
+                        String userName = resultSet.getString("userName");
                         String description = resultSet.getString("description");
                         UUID imageId = UUID.fromString(resultSet.getString("imageId"));
                         int rate = resultSet.getInt("rate");
                         String needs = resultSet.getString("needs");
                         List<Skill> skills = JsonConverter.deserialize(resultSet.getString("skills"), Skill.class);
                         List<Feedback> feedbacks = JsonConverter.deserialize(resultSet.getString("feedbacks"),Feedback.class);
-                        return new Profile(id, userId, description, imageId, rate, needs, skills, feedbacks);
+                        return new Profile(id, userId, userName, description, imageId, rate, needs, skills, feedbacks);
                     });
             return Optional.ofNullable(profile);
         }catch (EmptyResultDataAccessException e){
@@ -95,13 +97,14 @@ public class ProfileDataAccessService implements ProfileDao {
                     new Object[]{userId},
                     (resultSet, i) -> {
                         UUID id = UUID.fromString(resultSet.getString("id"));
+                        String userName = resultSet.getString("userName");
                         String description = resultSet.getString("description");
                         UUID imageId = UUID.fromString(resultSet.getString("imageId"));
                         int rate = resultSet.getInt("rate");
                         String needs = resultSet.getString("needs");
                         List<Skill> skills = JsonConverter.deserialize(resultSet.getString("skills"), Skill.class);
                         List<Feedback> feedbacks = JsonConverter.deserialize(resultSet.getString("feedbacks"),Feedback.class);
-                        return new Profile(id, userId, description, imageId, rate, needs, skills, feedbacks);
+                        return new Profile(id, userId, userName, description, imageId, rate, needs, skills, feedbacks);
                     });
             return Optional.ofNullable(profile);
         }catch (EmptyResultDataAccessException e){
@@ -122,11 +125,12 @@ public class ProfileDataAccessService implements ProfileDao {
         final String feedbacksJson = JsonConverter.serialize(profile.getFeedbacks());
         final String sql = """ 
                 UPDATE profiles
-                SET userId = ?, description = ?, rate = ?, needs = ?, skills = CAST(? AS json), feedbacks = CAST(? AS json)
+                SET userId = ?, userName = ?, description = ?, rate = ?, needs = ?, skills = CAST(? AS json), feedbacks = CAST(? AS json)
                 WHERE id = ?;
                 """;
         return jdbcTemplate.update(sql,
                 profile.getUserId(),
+                profile.getUserName(),
                 profile.getDescription(),
                 profile.getRate(),
                 profile.getNeeds(),
@@ -136,13 +140,21 @@ public class ProfileDataAccessService implements ProfileDao {
     }
 
     @Override
-    public List<Profile> searchBySkill(String skillText) {
-        final String sql = "SELECT * FROM profiles WHERE to_tsvector(skills) @@plainto_tsquery('" + skillText + "') ORDER BY rate DESC";
+    public List<Profile> searchProfiles(String text) {
+        final String sql = """
+            SELECT * FROM profiles
+            WHERE to_tsvector(
+            COALESCE((SELECT string_agg(elem->>'name', ' ') FROM jsonb_array_elements(skills) AS elem), ''
+            ) || ' ' || COALESCE(userName, '') || ' ' || COALESCE(needs, '') || ' ' || COALESCE(description,''
+            )) @@plainto_tsquery(?) ORDER BY rate DESC;
+        """;
         return jdbcTemplate.query(sql,
+                new Object[]{text},
                 (resultSet, i) -> {
                     UUID imageId = null;
                     UUID id = UUID.fromString(resultSet.getString("id"));
                     UUID userId = UUID.fromString(resultSet.getString("userId"));
+                    String userName = resultSet.getString("userName");
                     String description = resultSet.getString("description");
                     String imageString = resultSet.getString("imageId");
                     if (imageString!=null && !imageString.isEmpty()) {
@@ -152,7 +164,8 @@ public class ProfileDataAccessService implements ProfileDao {
                     String needs = resultSet.getString("needs");
                     List<Skill> skills = JsonConverter.deserialize(resultSet.getString("skills"), Skill.class);
                     List<Feedback> feedbacks = JsonConverter.deserialize(resultSet.getString("feedbacks"), Feedback.class);
-                    return new Profile(id, userId, description, imageId, rate, needs, skills, feedbacks);
+                    Profile profile = new Profile(id, userId, userName, description, imageId, rate, needs, skills, feedbacks);
+                    return profile;
                 });
     }
 

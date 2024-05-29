@@ -16,6 +16,7 @@ public class Profile {
     private final UUID id;
     @NotBlank
     private final UUID userId;
+    private final String userName;
     private final String description;
     private final UUID imageId;
     private final int rate;

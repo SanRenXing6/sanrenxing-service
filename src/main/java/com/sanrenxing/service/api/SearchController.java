@@ -22,5 +22,5 @@ public class SearchController {
     }
 
     @GetMapping(path="{text}")
-    public List<Profile> searchBySkill(@PathVariable("text") String text) { return profileService.searchBySkill(text); }
+    public List<Profile> searchProfiles(@PathVariable("text") String text) { return profileService.searchProfile(text); }
 }

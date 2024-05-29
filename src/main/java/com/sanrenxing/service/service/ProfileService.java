@@ -44,5 +44,5 @@ public class ProfileService {
         return profileDao.updateProfile(id, profile);
     }
 
-    public List<Profile> searchBySkill(String text) {return profileDao.searchBySkill(text); }
+    public List<Profile> searchProfile(String text) {return profileDao.searchProfiles(text); }
 }

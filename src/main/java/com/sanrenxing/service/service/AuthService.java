@@ -63,6 +63,7 @@ public class AuthService {
             return LoginResponse.builder()
                     .token(jwtToken)
                     .userId(user.getId())
+                    .userName(user.getName())
                     .profileId(profile.get().getId())
                     .imageId(profile.get().getImageId())
                     .build();
@@ -70,6 +71,7 @@ public class AuthService {
             return LoginResponse.builder()
                     .token(jwtToken)
                     .userId(user.getId())
+                    .userName(user.getName())
                     .build();
         }
     }

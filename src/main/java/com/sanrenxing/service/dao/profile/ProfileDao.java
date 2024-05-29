@@ -19,5 +19,5 @@ public interface ProfileDao {
 
     int updateProfile(UUID id, Profile profile);
 
-    List<Profile> searchBySkill(String skillText);
+    List<Profile> searchProfiles(String text);
 }
