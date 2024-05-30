@@ -9,7 +9,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.util.*;
 
 @Slf4j
-public class WebSocketController extends TextWebSocketHandler {
+public class TextWSController extends TextWebSocketHandler {
 
     private final Map<String, WebSocketSession> webSocketSessions = new HashMap<>();
 
