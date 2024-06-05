@@ -23,7 +23,7 @@ public class TextWSController extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
         String[] data = payload.split(":", 5);
-        // ${toUserName}:${toUserId}:${fromUserName}:${fromUserId}:${inputMessage}
+        // ${toUserName}:${toUserId}:${fromUserName}:${fromUserId}:${message}
         String toUserId = data[1];
         WebSocketSession toSession = webSocketSessions.get(toUserId);
         if (toSession != null && toSession.isOpen()) {
