@@ -1,6 +1,5 @@
 package com.sanrenxing.service.api;
 
-import com.sanrenxing.service.model.data.Profile;
 import com.sanrenxing.service.model.data.SkillLabel;
 import com.sanrenxing.service.service.SkillService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.UUID;
 
 @RequestMapping("api/v1/skills")
 @RestController
